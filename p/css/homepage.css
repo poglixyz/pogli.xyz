@@ -14,9 +14,8 @@
   
   
 html {
-  background: url(../../img/bg.jpg) center center no-repeat;
+  background: url('../../img/bg.jpg') no-repeat center center fixed;
   background-size: cover;
-  background-position: center;
   }
 
 *::-webkit-input-placeholder {
@@ -136,4 +135,3 @@ form {
   .go:focus {
     outline: none;
 	}
-
