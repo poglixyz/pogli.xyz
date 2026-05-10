@@ -25,6 +25,15 @@ body {
     flex-direction: column;
 }
 
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url('img/bg-city.png') no-repeat center center / cover;
+    opacity: 0.2;
+    z-index: -1;
+}
+
 .container {
     display: flex;
     flex-direction: column;
