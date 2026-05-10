@@ -1,10 +1,23 @@
-/*CSS*/
-body {
-    font-family: Arial, sans-serif;
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background: url('img/bg.jpg') no-repeat center center fixed;
-    background-size: cover;
+}
+
+:root {
+    --pink: #ffd6ff;
+    --blue: #a3d0ff;
+    --bg: #0a0a0f;
+    --surface: rgba(255, 255, 255, 0.04);
+    --border: rgba(255, 255, 255, 0.07);
+    --text: #e8e8f0;
+    --muted: rgba(232, 232, 240, 0.35);
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background-color: var(--bg);
+    color: var(--text);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,67 +25,117 @@ body {
     flex-direction: column;
 }
 
-.square {
-    width: auto;
-    min-width: 100px;
-    height: auto;
-    min-height: 100px;
-    border: 2px solid rgb(255, 255, 255);
+.container {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px;
-    white-space: nowrap;
-    transition: box-shadow 1s ease; /* hover transition */
+    align-items: flex-start;
+    gap: 14px;
 }
 
-.square:hover {
-    color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    animation: smoke 1s ease-in-out infinite;
+.header {
+    padding-left: 2px;
+}
+
+.title {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.title-accent {
+    background: linear-gradient(90deg, var(--pink), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 22px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--pink), var(--blue));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.card:hover::after {
+    opacity: 0.2;
 }
 
 a {
     text-decoration: none;
-    color: rgb(255, 255, 255);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    padding: 7px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.15s ease;
+    border-bottom: 1px solid transparent;
 }
 
-a:hover {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%);
+a:not(:last-child) {
+    border-bottom-color: var(--border);
+}
+
+.arrow {
+    color: var(--muted);
+    font-size: 14px;
+    transition: transform 0.2s ease, color 0.15s ease;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+a:hover .arrow {
+    transform: translateX(3px);
+    color: var(--pink);
+}
+
+a:hover .link-text {
+    background: linear-gradient(90deg, var(--pink), var(--blue));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    animation: fadeInOut 5s ease-in-out infinite;
 }
 
-@keyframes fadeInOut {
-    0%, 100% {
-        opacity: 0.6; /* 60% opacity min */
-    }
-    50% {
-        opacity: 1;
-    }
-}
-
-/*Line of text below the square, created for usernames page but prob used in other places lol*/
-.info {
-    text-align: center;
-    margin-top: 10px;
-    color: rgb(160, 160, 160);
-    font-size: 14px;
-    width: 100%;
+.tag {
+    font-size: 9px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 6px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
 }
 
 footer {
-    position: absolute;
-    bottom: 10px;
+    position: fixed;
+    bottom: 18px;
     width: 100%;
     text-align: center;
 }
 
 .footer-text {
-    color: rgb(255, 255, 255);
-    font-size: 14px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
 }
