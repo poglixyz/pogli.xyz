@@ -37,7 +37,7 @@ body::before {
 
 @keyframes bgFadeIn {
     from { opacity: 0; }
-    to   { opacity: 0.1; }
+    to   { opacity: 0.3; }
 }
 
 @keyframes cardReveal {
