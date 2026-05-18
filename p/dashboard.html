@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Created by Pogli - pogli.xyz -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>silvia.dash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/img/icon.png">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+    <defs>
+        <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ffd6ff"/>
+            <stop offset="100%" stop-color="#a3d0ff"/>
+        </linearGradient>
+        <linearGradient id="gradFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#a3d0ff" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#a3d0ff" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+</svg>
+
+<div class="topbar">
+    <div class="brand">
+        <span class="pulse" id="m-pulse"></span>
+        <span class="accent">silvia.dash</span>
+        <span class="slash">/</span>
+        <span id="m-clock" class="clock">--:--:--</span>
+        <span class="date" id="m-date">—</span>
+    </div>
+    <div class="topbar-meta">
+        <span class="pop-wrap">nodes<button id="m-nodes" class="badge pill" aria-haspopup="true" aria-expanded="false">—</button>
+            <div class="pop" id="m-nodes-pop" hidden>
+                <div class="pop-head"><span class="pop-title">tailnet · devices</span><span class="pop-count" id="m-nodes-popcount">—</span></div>
+                <div class="pop-body" id="m-nodes-list"></div>
+            </div>
+        </span>
+        <span class="pop-wrap">services<button id="m-services" class="badge pill" aria-haspopup="true" aria-expanded="false">—</button>
+            <div class="pop" id="m-services-pop" hidden>
+                <div class="pop-head"><span class="pop-title">xyzserver · services</span><span class="pop-count" id="m-services-popcount">—</span></div>
+                <div class="pop-body" id="m-services-list"></div>
+            </div>
+        </span>
+        <span class="pop-wrap">alerts<button id="m-alerts" class="badge" aria-haspopup="true" aria-expanded="false">—</button>
+            <div class="pop" id="m-alerts-pop" hidden>
+                <div class="pop-head"><span class="pop-title">active alerts</span><span class="pop-count" id="m-alerts-popcount">0</span></div>
+                <div class="pop-body" id="m-alerts-list"></div>
+            </div>
+        </span>
+        <span class="pop-wrap">max temp<button id="m-maxtemp" class="badge pill" aria-haspopup="true" aria-expanded="false">—°c</button>
+            <div class="pop" id="m-maxtemp-pop" hidden>
+                <div class="pop-head"><span class="pop-title">temperature · sensors</span><span class="pop-count" id="m-maxtemp-popcount">—</span></div>
+                <div class="pop-body" id="m-maxtemp-list"></div>
+            </div>
+        </span>
+        <span class="pop-wrap">uptime<button id="m-uptime" class="badge pill" aria-haspopup="true" aria-expanded="false">—</button>
+            <div class="pop" id="m-uptime-pop" hidden>
+                <div class="pop-head"><span class="pop-title">host · uptime</span><span class="pop-count" id="m-uptime-popcount">—</span></div>
+                <div class="pop-body" id="m-uptime-list"></div>
+            </div>
+        </span>
+        <span>updated<b id="m-updated">—</b></span>
+    </div>
+</div>
+
+<div class="grid">
+
+    <div class="widget span-4">
+        <div class="w-head">
+            <div class="w-title"><span class="num">01</span>tailnet</div>
+            <div class="w-tag" id="t-tailnet-tag">—</div>
+        </div>
+        <div class="row-list" id="t-tailnet"></div>
+    </div>
+
+    <div class="widget span-4">
+        <div class="w-head">
+            <div class="w-title"><span class="num">02</span>services</div>
+            <div class="w-tag">xyzserver</div>
+        </div>
+        <div class="row-list" id="t-services"></div>
+    </div>
+
+    <div class="widget span-4">
+        <div class="w-head">
+            <div class="w-title"><span class="num">03</span>game servers</div>
+            <div class="w-tag" id="t-games-tag">—</div>
+        </div>
+        <div class="row-list" id="t-games"></div>
+    </div>
+
+    <div class="widget span-6">
+        <div class="w-head">
+            <div class="w-title"><span class="num">04</span>cpu · live</div>
+            <div class="w-tag">poglipi + xyzserver</div>
+        </div>
+        <svg class="chart" viewBox="0 0 400 64" preserveAspectRatio="none">
+            <path id="t-chart-fill" class="fill" d=""/>
+            <path id="t-chart-line" d=""/>
+        </svg>
+        <div class="chart-legend">
+            <span>-5m</span><span>-3m</span><span>-1m</span><span>now</span>
+        </div>
+        <div class="metric-grid" style="margin-top:12px">
+            <div class="metric">
+                <div class="label">poglipi · load</div>
+                <div class="value"><span id="t-pogli-load">—</span><span class="unit">1m</span></div>
+                <div class="sub" id="t-pogli-load-sub">—</div>
+            </div>
+            <div class="metric">
+                <div class="label">xyzserver · load</div>
+                <div class="value"><span id="t-xyz-load">—</span><span class="unit">1m</span></div>
+                <div class="sub" id="t-xyz-load-sub">—</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget span-6">
+        <div class="w-head">
+            <div class="w-title"><span class="num">05</span>temperature</div>
+            <div class="w-tag">sensors</div>
+        </div>
+        <div class="metric-grid">
+            <div class="metric">
+                <div class="label">poglipi · cpu</div>
+                <div class="value"><span id="t-pogli-temp">—</span><span class="unit">°c</span></div>
+                <div class="sub" id="t-pogli-temp-sub">throttle @ 80°c</div>
+            </div>
+            <div class="metric">
+                <div class="label">xyzserver · cpu</div>
+                <div class="value"><span id="t-xyz-temp">—</span><span class="unit">°c</span></div>
+                <div class="sub" id="t-xyz-temp-sub">pkg id 0</div>
+            </div>
+            <div class="metric">
+                <div class="label">xyzserver · nvme</div>
+                <div class="value"><span id="t-nvme-temp">—</span><span class="unit">°c</span></div>
+                <div class="sub" id="t-nvme-temp-sub">/dev/nvme0n1</div>
+            </div>
+            <div class="metric">
+                <div class="label">ambient · ha</div>
+                <div class="value"><span id="t-ambient">—</span><span class="unit">°c</span></div>
+                <div class="sub" id="t-ambient-sub">—</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget span-6">
+        <div class="w-head">
+            <div class="w-title"><span class="num">06</span>resources · xyzserver</div>
+            <div class="w-tag" id="t-xyz-uptime">—</div>
+        </div>
+        <div id="t-xyz-bars"></div>
+    </div>
+
+    <div class="widget span-6">
+        <div class="w-head">
+            <div class="w-title"><span class="num">07</span>resources · poglipi</div>
+            <div class="w-tag" id="t-pogli-uptime">—</div>
+        </div>
+        <div id="t-pogli-bars"></div>
+    </div>
+
+    <div class="widget span-4">
+        <div class="w-head">
+            <div class="w-title"><span class="num">08</span>home assistant</div>
+            <div class="w-tag">lights</div>
+        </div>
+        <div class="row-list" id="t-lights"></div>
+    </div>
+
+    <div class="widget span-4">
+        <div class="w-head">
+            <div class="w-title"><span class="num">09</span>heating</div>
+            <div class="w-tag" id="t-heat-tag">—</div>
+        </div>
+        <div class="dial-wrap">
+            <svg class="dial" viewBox="0 0 200 140" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="dialGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#a3d0ff"/>
+                        <stop offset="100%" stop-color="#ffd6ff"/>
+                    </linearGradient>
+                </defs>
+                <!-- track -->
+                <path d="M 20 120 A 80 80 0 0 1 180 120"
+                      fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6" stroke-linecap="round"/>
+                <!-- progress arc -->
+                <path id="t-heat-arc" d="" fill="none" stroke="url(#dialGrad)" stroke-width="6" stroke-linecap="round"/>
+                <!-- target tick -->
+                <line id="t-heat-target-tick" x1="0" y1="0" x2="0" y2="0"
+                      stroke="rgba(255,214,255,0.85)" stroke-width="2" stroke-linecap="round"/>
+                <!-- min/max labels -->
+                <text x="20"  y="135" class="dial-tick">5°</text>
+                <text x="180" y="135" class="dial-tick" text-anchor="end">32°</text>
+            </svg>
+            <div class="dial-center">
+                <div class="dial-current"><span id="t-heat-current">—</span><span class="dial-unit">°c</span></div>
+                <div class="dial-target">target <b id="t-heat-target">—°</b></div>
+            </div>
+        </div>
+        <div class="heat-meta">
+            <div class="heat-cell">
+                <div class="label">mode</div>
+                <div class="val" id="t-heat-mode">—</div>
+            </div>
+            <div class="heat-cell">
+                <div class="label">action</div>
+                <div class="val" id="t-heat-action"><span class="dot idle"></span>—</div>
+            </div>
+            <div class="heat-cell">
+                <div class="label">battery</div>
+                <div class="val" id="t-heat-battery">—%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget span-4">
+        <div class="w-head">
+            <div class="w-title"><span class="num">10</span>event log</div>
+            <div class="w-tag" id="t-log-tag">live</div>
+        </div>
+        <div class="row-list" id="t-events"></div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <span id="t-status">connecting...</span>
+    <span><a href="../index.html">‹ back</a></span>
+</div>
+
+<script src="/api/js/config.js" defer></script>
+<script src="/api/js/dashboard.js" defer></script>
+
+</body>
+</html>
