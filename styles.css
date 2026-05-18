@@ -1,3 +1,5 @@
+@view-transition { navigation: auto; }
+
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -32,7 +34,8 @@ body::before {
     background: url('img/bg-city.png') no-repeat center center / cover;
     opacity: 0.1;
     z-index: -1;
-    animation: bgFadeIn 1s ease forwards;
+    animation: bgFadeIn 1.5s ease forwards;
+    view-transition-name: site-bg;
 }
 
 @keyframes bgFadeIn {
@@ -135,11 +138,18 @@ a:hover .arrow {
     color: var(--pink);
 }
 
-a:hover .link-text {
-    background: linear-gradient(90deg, var(--pink), var(--blue));
+.link-text {
+    background: linear-gradient(90deg, var(--pink), var(--blue), var(--text) 50%);
+    background-size: 200%;
+    background-position: 100%;
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 0.35s ease;
+}
+
+a:hover .link-text {
+    background-position: 0%;
 }
 
 .tag {
@@ -166,4 +176,114 @@ footer {
     font-size: 10px;
     font-weight: 300;
     letter-spacing: 0.12em;
+}
+
+/* ── startpage ── */
+
+body.startpage {
+    gap: 20px;
+    overflow: hidden;
+}
+
+body.startpage::before {
+    animation: none;
+    opacity: 0.3;
+}
+
+.search-wrap {
+    width: 100%;
+    max-width: 520px;
+}
+
+.search {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    padding: 6px 0;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.search::placeholder { color: var(--muted); }
+.search:focus { border-bottom-color: rgba(255, 214, 255, 0.4); }
+
+.cards-row {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.card-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 180px;
+    flex-shrink: 0;
+}
+
+.card-group .card {
+    flex: 1;
+}
+
+.card-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-left: 2px;
+}
+
+body.startpage .card { animation-delay: 0.05s; }
+body.startpage .card-group:nth-child(2) .card { animation-delay: 0.15s; }
+body.startpage .card-group:nth-child(3) .card { animation-delay: 0.25s; }
+body.startpage .card-group:nth-child(4) .card { animation-delay: 0.35s; }
+
+body.startpage a[href="#"] .link-text,
+body.startpage a[href="#"] .arrow {
+    color: var(--muted);
+    -webkit-text-fill-color: var(--muted);
+    opacity: 0.5;
+}
+body.startpage a[href="#"]:hover .link-text,
+body.startpage a[href="#"]:hover .arrow {
+    opacity: 0.5;
+    background: none;
+    -webkit-text-fill-color: var(--muted);
+}
+
+.sp-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+}
+
+.sp-back {
+    display: inline;
+    padding: 0;
+    border-bottom: none;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    font-weight: 300;
+    transition: color 0.2s ease;
+    -webkit-text-fill-color: var(--muted);
+}
+
+.sp-back:hover {
+    background: linear-gradient(90deg, var(--pink), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
