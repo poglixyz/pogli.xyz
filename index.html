@@ -8,47 +8,107 @@
     <title>pogli.xyz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <span class="title">pogli<span class="title-accent">.xyz</span></span>
-        </div>
-        <div class="card">
-            <a href="p/startpage.html">
-                <span class="arrow">›</span>
-                <span class="link-text">.startpage</span>
-            </a>
-            <a href="p/dashboard.html">
-                <span class="arrow">›</span>
-                <span class="link-text">.dashboard</span>
-            </a>
-            <a href="https://xyzserver.yak-diatonic.ts.net/">
-                <span class="arrow">›</span>
-                <span class="link-text">.casa</span>
-            </a>
-            <a href="https://poglipi.yak-diatonic.ts.net">
-                <span class="arrow">›</span>
-                <span class="link-text">.homelab</span>
-            </a>
-            <a href="https://xyzserver.yak-diatonic.ts.net:8123/">
-                <span class="arrow">›</span>
-                <span class="link-text">.home assistant</span>
-            </a>
-            <a href="https://xyzserver.yak-diatonic.ts.net:8443/">
-                <span class="arrow">›</span>
-                <span class="link-text">.server management</span>
-            <!-- <span class="tag">tba</span> -->
-            </a>
-        </div>
-    </div>
-    <footer>
-        <p class="footer-text">created by pogli</p>
-    </footer>
-</body>
 
+    <!-- Top chrome bar -->
+    <header class="chrome-bar chrome-top">
+        <span class="chrome-logo">PXYZ<span class="chrome-reg">®</span></span>
+        <span class="chrome-sep">|</span>
+        <span class="chrome-label">std.sys ✦ v2.0</span>
+        <div class="chrome-right">
+            <span class="chrome-cert">CE ⊕</span>
+            <span class="chrome-cert">FC</span>
+            <span class="chrome-cert-label">CERTIFIED</span>
+        </div>
+    </header>
+
+    <!-- Stars layer (populated by JS) -->
+    <div class="stars" aria-hidden="true"></div>
+
+    <!-- Main content -->
+    <main class="main">
+        <div class="console-frame">
+
+            <!-- Corner brackets -->
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+
+            <!-- System header -->
+            <div class="sys-header">
+                <div class="sys-id">
+                    <span class="sys-id-label">SYS</span>
+                    <span class="sys-id-value">001</span>
+                </div>
+                <div class="sys-title-wrap">
+                    <h1 class="sys-title">pogli<span class="sys-title-accent">.xyz</span></h1>
+                    <p class="sys-subtitle">SYSTEM&nbsp;&nbsp;MENU</p>
+                </div>
+                <div class="sys-jp" aria-hidden="true">ポグリ</div>
+            </div>
+
+            <div class="divider-line"></div>
+
+            <!-- Menu -->
+            <nav class="sys-menu">
+                <a href="p/startpage.html" class="menu-item">
+                    <span class="item-bullet">▸</span>
+                    <span class="item-label">STARTPAGE</span>
+                    <span class="item-fill"></span>
+                    <span class="item-tag">SYS</span>
+                </a>
+                <a href="p/dashboard.html" class="menu-item">
+                    <span class="item-bullet">▸</span>
+                    <span class="item-label">DASHBOARD</span>
+                    <span class="item-fill"></span>
+                    <span class="item-tag">DAT</span>
+                </a>
+                <a href="https://xyzserver.yak-diatonic.ts.net/" class="menu-item">
+                    <span class="item-bullet">▸</span>
+                    <span class="item-label">CASA&nbsp;OS</span>
+                    <span class="item-fill"></span>
+                    <span class="item-tag">NET</span>
+                </a>
+                <a href="https://poglipi.yak-diatonic.ts.net" class="menu-item">
+                    <span class="item-bullet">▸</span>
+                    <span class="item-label">HOMELAB</span>
+                    <span class="item-fill"></span>
+                    <span class="item-tag">NET</span>
+                </a>
+                <a href="https://xyzserver.yak-diatonic.ts.net:8123/" class="menu-item">
+                    <span class="item-bullet">▸</span>
+                    <span class="item-label">HOME&nbsp;ASSIST.</span>
+                    <span class="item-fill"></span>
+                    <span class="item-tag">IOT</span>
+                </a>
+                <a href="https://xyzserver.yak-diatonic.ts.net:8443/" class="menu-item">
+                    <span class="item-bullet">▸</span>
+                    <span class="item-label">SERVER&nbsp;MGT.</span>
+                    <span class="item-fill"></span>
+                    <span class="item-tag">ADM</span>
+                </a>
+            </nav>
+
+        </div>
+    </main>
+
+    <!-- Bottom status bar -->
+    <footer class="chrome-bar chrome-bottom">
+        <span class="status-dot"></span>
+        <span class="status-text">ONLINE</span>
+        <span class="chrome-sep">|</span>
+        <span class="status-text" id="clock">--:--:--</span>
+        <span class="chrome-sep">|</span>
+        <span class="status-text">pogli.xyz</span>
+        <span class="chrome-sep">|</span>
+        <span class="status-text muted">© POGLI</span>
+    </footer>
+
+</body>
 </html>
