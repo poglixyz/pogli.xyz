@@ -8,7 +8,7 @@
     <title>pogli.xyz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=DotGothic16&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js" defer></script>
@@ -19,19 +19,36 @@
     <header class="chrome-bar chrome-top">
         <span class="chrome-logo">PXYZ<span class="chrome-reg">®</span></span>
         <span class="chrome-sep">|</span>
-        <span class="chrome-label">std.sys ✦ v2.0</span>
+        <span class="chrome-label">sil.via ♡ v2.0</span>
+        <span class="chrome-sep">|</span>
+        <div class="ticker-wrap" aria-hidden="true">
+            <div class="ticker">
+                <span>◆&nbsp;&nbsp;&nbsp;&nbsp;WELCOME&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;NO DISC INSERTED&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;MEM: 512K / OK&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;SIGNAL: ████████░░&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;STANDBY MODE&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span>◆&nbsp;&nbsp;&nbsp;&nbsp;WELCOME&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;NO DISC INSERTED&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;MEM: 512K / OK&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;SIGNAL: ████████░░&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;STANDBY MODE&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </div>
+        </div>
         <div class="chrome-right">
+            <span class="chrome-uptime" id="uptime">UP: 00:00:00</span>
+            <span class="chrome-sep">|</span>
+            <span class="chrome-region">NTSC-J</span>
+            <span class="chrome-sep">|</span>
             <span class="chrome-cert">CE ⊕</span>
             <span class="chrome-cert">FC</span>
             <span class="chrome-cert-label">CERTIFIED</span>
         </div>
     </header>
 
-    <!-- Stars layer (populated by JS) -->
-    <div class="stars" aria-hidden="true"></div>
+    <!-- Ambient layers (populated by JS) -->
+    <div class="orbs"      aria-hidden="true"></div>
+    <div class="particles" aria-hidden="true"></div>
+    <div class="stars"     aria-hidden="true"></div>
+
+    <!-- Corner logo stamp -->
+    <img class="logo-stamp" src="img/logo.png" aria-hidden="true" alt="">
 
     <!-- Main content -->
     <main class="main">
+        <div class="console-wrap">
         <div class="console-frame">
 
             <!-- Corner brackets -->
@@ -48,12 +65,12 @@
                 </div>
                 <div class="sys-title-wrap">
                     <h1 class="sys-title">pogli<span class="sys-title-accent">.xyz</span></h1>
-                    <p class="sys-subtitle">SYSTEM&nbsp;&nbsp;MENU</p>
+                    <p class="sys-subtitle">SYSTEM&nbsp;MENU&nbsp;<span class="sys-subtitle-jp">システムメニュー</span></p>
                 </div>
                 <div class="sys-jp" aria-hidden="true">ポグリ</div>
             </div>
 
-            <div class="divider-line"></div>
+            <div class="divider-line"><span class="divider-gem">✦</span></div>
 
             <!-- Menu -->
             <nav class="sys-menu">
@@ -96,18 +113,21 @@
             </nav>
 
         </div>
+
+        <div class="no-disc" aria-hidden="true">◆&nbsp;&nbsp;NO DISC INSERTED&nbsp;&nbsp;◆</div>
+        </div>
     </main>
 
     <!-- Bottom status bar -->
     <footer class="chrome-bar chrome-bottom">
         <span class="status-dot"></span>
-        <span class="status-text">ONLINE</span>
+        <span class="status-text online">ONLINE</span>
         <span class="chrome-sep">|</span>
         <span class="status-text" id="clock">--:--:--</span>
         <span class="chrome-sep">|</span>
         <span class="status-text">pogli.xyz</span>
         <span class="chrome-sep">|</span>
-        <span class="status-text muted">© POGLI</span>
+        <span class="press-start">▸ PRESS START</span>
     </footer>
 
 </body>

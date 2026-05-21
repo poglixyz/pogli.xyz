@@ -8,69 +8,132 @@
     <title>pogli.xyz · startpage</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=DotGothic16&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="css/startpage.css">
+    <script src="../scripts.js" defer></script>
 </head>
 <body class="startpage">
 
-<div class="sp-topbar">
-    <a href="../index.html" class="sp-back">‹ back</a>
-</div>
-
-    <form class="search-wrap" method="get" action="https://www.google.com/search">
-        <input class="search" name="q" autocomplete="off" type="text" placeholder="search...">
-    </form>
-
-    <div class="cards-row">
-
-        <div class="card-group">
-            <div class="card-label">daily</div>
-            <div class="card">
-                <a href="https://www.google.com"><span class="arrow">›</span><span class="link-text">.google</span></a>
-                <a href="https://youtube.com"><span class="arrow">›</span><span class="link-text">.youtube</span></a>
-                <a href="https://steamcommunity.com/id/poglixyz"><span class="arrow">›</span><span class="link-text">.steam</span></a>
-                <a href="https://www.reddit.com"><span class="arrow">›</span><span class="link-text">.reddit</span></a>
-                <a href="https://www.twitch.tv"><span class="arrow">›</span><span class="link-text">.twitch</span></a>
+    <!-- Top chrome bar -->
+    <header class="chrome-bar chrome-top">
+        <span class="chrome-logo">PXYZ<span class="chrome-reg">®</span></span>
+        <span class="chrome-sep">|</span>
+        <span class="chrome-label">sil.via ✦ v2.0</span>
+        <span class="chrome-sep">|</span>
+        <div class="ticker-wrap" aria-hidden="true">
+            <div class="ticker">
+                <span>◆&nbsp;&nbsp;&nbsp;&nbsp;WELCOME&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;NO DISC INSERTED&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;MEM: 512K / OK&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;SIGNAL: ████████░░&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;STANDBY MODE&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span>◆&nbsp;&nbsp;&nbsp;&nbsp;WELCOME&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;NO DISC INSERTED&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;MEM: 512K / OK&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;SIGNAL: ████████░░&nbsp;&nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;&nbsp;STANDBY MODE&nbsp;&nbsp;&nbsp;&nbsp;</span>
             </div>
         </div>
-
-        <div class="card-group">
-            <div class="card-label">media</div>
-            <div class="card">
-                <a href="https://www.twitchls.com/"><span class="arrow">›</span><span class="link-text">.twitchls</span></a>
-                <a href="https://mail.cock.li/"><span class="arrow">›</span><span class="link-text">.li mail</span></a>
-                <a href="https://mail.google.com"><span class="arrow">›</span><span class="link-text">.gmail</span></a>
-                <a href="https://account.proton.me/mail"><span class="arrow">›</span><span class="link-text">.proton</span></a>
-            </div>
+        <div class="chrome-right">
+            <span class="chrome-uptime" id="uptime">UP: 00:00:00</span>
+            <span class="chrome-sep">|</span>
+            <span class="chrome-region">NTSC-J</span>
+            <span class="chrome-sep">|</span>
+            <span class="chrome-cert">CE ⊕</span>
+            <span class="chrome-cert">FC</span>
+            <span class="chrome-cert-label">CERTIFIED</span>
         </div>
+    </header>
 
-        <div class="card-group">
-            <div class="card-label">shop</div>
-            <div class="card">
-                <a href="#"><span class="arrow">›</span><span class="link-text">.placeholder</span></a>
-                <a href="#"><span class="arrow">›</span><span class="link-text">.placeholder</span></a>
-                <a href="#"><span class="arrow">›</span><span class="link-text">.placeholder</span></a>
-                <a href="#"><span class="arrow">›</span><span class="link-text">.placeholder</span></a>
-                <a href="#"><span class="arrow">›</span><span class="link-text">.placeholder</span></a>
+    <!-- Ambient layers (populated by JS) -->
+    <div class="orbs"      aria-hidden="true"></div>
+    <div class="particles" aria-hidden="true"></div>
+    <div class="stars"     aria-hidden="true"></div>
+
+    <!-- Corner logo stamp -->
+    <img class="logo-stamp" src="../img/logo.png" aria-hidden="true" alt="">
+
+    <!-- Main content -->
+    <main class="sp-main">
+        <div class="console-wrap">
+            <div class="sp-console">
+
+                <!-- Corner brackets -->
+                <div class="corner corner-tl"></div>
+                <div class="corner corner-tr"></div>
+                <div class="corner corner-bl"></div>
+                <div class="corner corner-br"></div>
+
+                <!-- Header -->
+                <div class="sys-header">
+                    <div class="sys-id">
+                        <span class="sys-id-label">SYS</span>
+                        <span class="sys-id-value">002</span>
+                    </div>
+                    <div class="sys-title-wrap">
+                        <h1 class="sys-title">start<span class="sys-title-accent">page</span></h1>
+                        <p class="sys-subtitle">QUICK&nbsp;ACCESS&nbsp;<span class="sys-subtitle-jp">クイックアクセス</span></p>
+                    </div>
+                    <div class="sys-jp" aria-hidden="true">ポグリ</div>
+                </div>
+
+                <!-- Search -->
+                <div class="divider-line"><span class="divider-gem">✦</span></div>
+
+                <form class="sp-search-wrap" method="get" action="https://www.google.com/search">
+                    <span class="sp-search-prefix">›</span>
+                    <input class="sp-search" name="q" autocomplete="off" type="text" placeholder="// search the web_">
+                </form>
+
+                <div class="sp-inner-divider"></div>
+
+                <!-- Link groups -->
+                <div class="sp-groups">
+
+                    <div class="sp-group">
+                        <div class="sp-group-label">◆ DAILY</div>
+                        <a href="https://www.google.com"       class="sp-link"><span class="item-bullet">▸</span><span>google</span></a>
+                        <a href="https://youtube.com"          class="sp-link"><span class="item-bullet">▸</span><span>youtube</span></a>
+                        <a href="https://steamcommunity.com/id/poglixyz" class="sp-link"><span class="item-bullet">▸</span><span>steam</span></a>
+                        <a href="https://www.reddit.com"       class="sp-link"><span class="item-bullet">▸</span><span>reddit</span></a>
+                    </div>
+
+                    <div class="sp-group">
+                        <div class="sp-group-label">◆ MEDIA</div>
+                        <a href="https://www.twitchls.com/"        class="sp-link"><span class="item-bullet">▸</span><span>twitchls</span></a>
+                        <a href="https://mail.cock.li/"            class="sp-link"><span class="item-bullet">▸</span><span>li mail</span></a>
+                        <a href="https://mail.google.com"          class="sp-link"><span class="item-bullet">▸</span><span>gmail</span></a>
+                        <a href="https://account.proton.me/mail"   class="sp-link"><span class="item-bullet">▸</span><span>proton</span></a>
+                    </div>
+
+                    <div class="sp-group">
+                        <div class="sp-group-label">◆ SHOP</div>
+                        <a href="#" class="sp-link"><span class="item-bullet">▸</span><span>placeholder</span></a>
+                        <a href="#" class="sp-link"><span class="item-bullet">▸</span><span>placeholder</span></a>
+                        <a href="#" class="sp-link"><span class="item-bullet">▸</span><span>placeholder</span></a>
+                        <a href="#" class="sp-link"><span class="item-bullet">▸</span><span>placeholder</span></a>
+                    </div>
+
+                    <div class="sp-group">
+                        <div class="sp-group-label">◆ RESOURCES</div>
+                        <a href="https://www.netim.com/"                        class="sp-link"><span class="item-bullet">▸</span><span>netim</span></a>
+                        <a href="https://www.namecheap.com/"                    class="sp-link"><span class="item-bullet">▸</span><span>namecheap</span></a>
+                        <a href="https://pentesterlab.com/"                     class="sp-link"><span class="item-bullet">▸</span><span>pentesterlab</span></a>
+                        <a href="https://portswigger.net/web-security"          class="sp-link"><span class="item-bullet">▸</span><span>portswigger</span></a>
+                    </div>
+
+                </div>
+
             </div>
+
+            <a href="../index.html" class="back-btn">◂&nbsp;&nbsp;MAIN&nbsp;MENU&nbsp;&nbsp;·&nbsp;&nbsp;システムメニュー</a>
         </div>
+    </main>
 
-        <div class="card-group">
-            <div class="card-label">resources</div>
-            <div class="card">
-                <a href="https://www.netim.com/"><span class="arrow">›</span><span class="link-text">.netim</span></a>
-                <a href="https://www.namecheap.com/"><span class="arrow">›</span><span class="link-text">.namecheap</span></a>
-                <a href="https://pentesterlab.com/"><span class="arrow">›</span><span class="link-text">.pentesterlab</span></a>
-                <a href="https://portswigger.net/web-security"><span class="arrow">›</span><span class="link-text">.portswigger</span></a>
-                <a href="https://packetlife.net/library/cheat-sheets/"><span class="arrow">›</span><span class="link-text">.packetlife</span></a>
-            </div>
-        </div>
-
-    </div>
-
-    <footer>
-        <p class="footer-text">created by pogli</p>
+    <!-- Bottom chrome bar -->
+    <footer class="chrome-bar chrome-bottom">
+        <span class="status-dot"></span>
+        <span class="status-text online">ONLINE</span>
+        <span class="chrome-sep">|</span>
+        <span class="status-text" id="clock">--:--:--</span>
+        <span class="chrome-sep">|</span>
+        <span class="status-text">pogli.xyz</span>
+        <span class="chrome-sep">|</span>
+        <span class="press-start">▸ PRESS START</span>
     </footer>
 
 </body>

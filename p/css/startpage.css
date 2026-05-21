@@ -1,0 +1,191 @@
+/* ── Startpage console frame ── */
+
+.sp-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: calc(var(--bar-h) + 24px) 24px;
+    position: relative;
+    z-index: 3;
+}
+
+/* inherits console-wrap float from styles.css */
+
+.sp-console {
+    position: relative;
+    width: min(760px, calc(100vw - 48px));
+    background: rgba(18, 6, 42, 0.28);
+    border: 1px solid var(--c-border);
+    padding: 28px 28px 24px;
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    box-shadow:
+        0 0 0 1px rgba(255, 200, 255, 0.06) inset,
+        0 8px 48px rgba(100, 40, 160, 0.2),
+        0 2px 12px rgba(163, 208, 255, 0.1);
+    animation: frame-in 1.2s ease 0.3s both;
+}
+
+/* gradient edge glow */
+.sp-console::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(135deg, rgba(255, 214, 255, 0.3), transparent 45%, rgba(163, 208, 255, 0.25) 100%);
+    z-index: -1;
+    opacity: 0.7;
+    border-radius: inherit;
+}
+
+/* inner top highlight */
+.sp-console::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 240, 255, 0.4), transparent);
+    pointer-events: none;
+}
+
+/* ── Search ── */
+
+.sp-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 8px 12px;
+    border: 1px solid var(--c-border);
+    background: rgba(255, 200, 255, 0.03);
+    transition: border-color 0.5s ease;
+}
+
+.sp-search-wrap:focus-within {
+    border-color: var(--c-border-hi);
+    box-shadow: 0 0 16px rgba(255, 180, 255, 0.06);
+}
+
+.sp-search-prefix {
+    color: var(--c-pink);
+    font-size: 14px;
+    opacity: 0.6;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.sp-search {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--c-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    outline: none;
+}
+
+.sp-search::placeholder { color: var(--c-muted); }
+
+/* ── Inner divider ── */
+
+.sp-inner-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--c-border) 50%, transparent);
+    margin-bottom: 16px;
+}
+
+/* ── Link groups ── */
+
+.sp-groups {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.sp-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--c-border);
+    background: rgba(255, 200, 255, 0.02);
+    opacity: 0;
+    animation: item-in 0.8s ease forwards;
+}
+
+.sp-group:nth-child(1) { animation-delay: 0.9s; }
+.sp-group:nth-child(2) { animation-delay: 1.1s; }
+.sp-group:nth-child(3) { animation-delay: 1.3s; }
+.sp-group:nth-child(4) { animation-delay: 1.5s; }
+
+.sp-group-label {
+    font-size: 7px;
+    letter-spacing: 0.28em;
+    color: #ffd6ff;
+    text-shadow:
+        0 0 6px rgba(255, 180, 255, 0.9),
+        0 0 18px rgba(255, 140, 255, 0.45);
+    padding: 7px 10px 6px;
+    border-bottom: 1px solid var(--c-border);
+}
+
+.sp-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--c-text);
+    border-bottom: 1px solid rgba(255, 200, 255, 0.06);
+    transition: background 0.5s ease, color 0.5s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.sp-link:last-child { border-bottom: none; }
+
+.sp-link:hover {
+    background: var(--c-hover);
+}
+
+.sp-link .item-bullet {
+    color: var(--c-pink);
+    font-size: 9px;
+    opacity: 0.45;
+    flex-shrink: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.sp-link:hover .item-bullet {
+    transform: translateX(2px);
+    opacity: 1;
+}
+
+.sp-link:hover span:last-child {
+    background: linear-gradient(90deg, var(--c-pink), var(--c-blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* shimmer on hover */
+.sp-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 240, 255, 0.04) 50%, transparent);
+    transform: translateX(-100%);
+    transition: transform 0.45s ease;
+}
+
+.sp-link:hover::after { transform: translateX(100%); }
+
+@media (max-width: 640px) {
+    .sp-groups { grid-template-columns: repeat(2, 1fr); }
+}
