@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
+    <script>if(localStorage.getItem('pxyz-dark')==='true')document.body.classList.add('dark-mode')</script>
+    <div class="theme-overlay" aria-hidden="true"></div>
 
 <!-- Top chrome bar -->
 <header class="chrome-bar chrome-top">
@@ -267,6 +269,8 @@
     <span class="status-text" id="clock">--:--:--</span>
     <span class="chrome-sep">|</span>
     <span class="status-text">pogli.xyz</span>
+    <span class="chrome-sep">|</span>
+    <button class="theme-toggle">☾ NIGHT</button>
     <span class="chrome-sep">|</span>
     <span class="press-start">▸ PRESS START</span>
 </footer>

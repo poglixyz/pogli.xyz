@@ -378,6 +378,24 @@ function buildTickerContent() {
     return messages.map(m => `◆${sep}${m}${sep}`).join('');
 }
 
+// ── Dark mode toggle ──
+(function () {
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.theme-toggle');
+        if (!btn) return;
+        const dark = document.body.classList.toggle('dark-mode');
+        localStorage.setItem('pxyz-dark', dark);
+        btn.textContent = dark ? '☀ DAY' : '☾ NIGHT';
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.querySelector('.theme-toggle');
+        if (btn) {
+            btn.textContent = document.body.classList.contains('dark-mode') ? '☀ DAY' : '☾ NIGHT';
+        }
+    });
+})();
+
 // ── Seamless ticker ──
 // pixel-precise loop. measure one unit, clone enough to fill the screen, animate by exactly that width.
 // no gaps, no glitches, no telltale jump on reset. took me a minute. worth it.

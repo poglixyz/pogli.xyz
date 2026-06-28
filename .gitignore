@@ -1,2 +1,6 @@
 p/js/config.js
 p/js/dashboard.js
+
+# Internal-only — served via Tailscale, not public
+p/hub.html
+p/css/hub.css

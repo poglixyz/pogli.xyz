@@ -61,6 +61,7 @@
 
 body {
     font-family: 'JetBrains Mono', 'Courier New', monospace;
+    transition: color 0.8s ease;
     background-color: #c8b8d8;
     background-image: url('img/bg-clouds.jpg');
     background-size: cover;
@@ -86,6 +87,7 @@ body::before {
     pointer-events: none;
     z-index: 0;
     animation: bg-hue-drift 50s ease-in-out infinite;
+    transition: background 1.5s ease;
 }
 
 @keyframes bg-hue-drift {
@@ -199,6 +201,7 @@ body::after {
     background: rgba(12, 4, 28, 0.55);
     backdrop-filter: blur(14px) saturate(120%);
     z-index: 100;
+    transition: background 1s ease, color 0.8s ease;
 }
 
 .chrome-top {
@@ -374,6 +377,7 @@ body::after {
     padding: 32px 32px 28px;
     backdrop-filter: blur(22px) saturate(130%);
     -webkit-backdrop-filter: blur(22px) saturate(130%);
+    transition: background 1s ease, border-color 0.8s ease, box-shadow 1s ease;
     box-shadow:
         0 0 0 1px rgba(255, 200, 255, 0.06) inset,
         0 8px 48px rgba(100, 40, 160, 0.2),
@@ -751,6 +755,142 @@ body::after {
 @keyframes item-in {
     from { opacity: 0; transform: translateX(-10px); }
     to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Dark mode toggle ── */
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--c-border);
+    color: var(--c-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    padding: 1px 8px;
+    cursor: pointer;
+    transition: color 0.5s ease, border-color 0.5s ease;
+    text-transform: uppercase;
+    line-height: 1.6;
+}
+
+.theme-toggle:hover {
+    color: var(--c-pink);
+    border-color: var(--c-border-hi);
+}
+
+/* ── Theme overlay (night sky behind clouds) ── */
+
+.theme-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0e0a1c;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+body.dark-mode .theme-overlay {
+    opacity: 1;
+}
+
+/* ── Dark mode overrides ── */
+
+body.dark-mode {
+    --c-pink:         #e0a8c0;
+    --c-blue:         #8ba8d4;
+    --c-pink-dim:     rgba(224, 168, 192, 0.6);
+    --c-blue-dim:     rgba(139, 168, 212, 0.6);
+    --c-text:         rgba(210, 200, 220, 0.9);
+    --c-muted:        rgba(170, 150, 190, 0.42);
+    --c-border:       rgba(120, 100, 160, 0.22);
+    --c-border-hi:    rgba(180, 140, 180, 0.4);
+    --c-surface:      rgba(14, 10, 28, 0.6);
+    --c-hover:        rgba(180, 140, 180, 0.06);
+
+}
+
+body.dark-mode::before {
+    background:
+        radial-gradient(ellipse 80% 40% at 50% 90%, rgba(180, 90, 60, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 55% at 20% 40%, rgba(60, 40, 120, 0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 80% 55%, rgba(40, 60, 130, 0.14) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(10, 8, 30, 0.0) 0%, rgba(80, 40, 50, 0.08) 70%, rgba(180, 100, 60, 0.06) 100%);
+    animation: bg-hue-drift 70s ease-in-out infinite;
+}
+
+body.dark-mode .chrome-bar {
+    background: rgba(10, 8, 22, 0.7);
+    transition: background 1s ease;
+}
+
+body.dark-mode .chrome-uptime {
+    color: rgba(57, 255, 122, 0.4);
+}
+
+body.dark-mode .chrome-region {
+    color: rgba(139, 168, 212, 0.5);
+    border-color: rgba(139, 168, 212, 0.2);
+}
+
+body.dark-mode .chrome-cert {
+    color: rgba(139, 168, 212, 0.55);
+    border-color: rgba(139, 168, 212, 0.25);
+    text-shadow: 0 0 8px rgba(100, 130, 200, 0.2);
+}
+
+body.dark-mode .chrome-cert-label {
+    color: rgba(139, 168, 212, 0.3);
+}
+
+body.dark-mode .chrome-label {
+    color: rgba(210, 185, 220, 0.5);
+    text-shadow: 0 0 10px rgba(180, 120, 160, 0.2);
+}
+
+body.dark-mode .console-frame,
+body.dark-mode .sp-console,
+body.dark-mode .hub-console {
+    background: rgba(14, 10, 28, 0.6);
+    box-shadow:
+        0 0 0 1px rgba(80, 50, 120, 0.08) inset,
+        0 8px 48px rgba(10, 6, 20, 0.5),
+        0 2px 12px rgba(60, 40, 100, 0.08);
+}
+
+body.dark-mode .console-frame::before,
+body.dark-mode .sp-console::before,
+body.dark-mode .hub-console::before {
+    background: linear-gradient(135deg, rgba(180, 120, 160, 0.15), transparent 45%, rgba(80, 100, 160, 0.12) 100%);
+    opacity: 0.5;
+}
+
+body.dark-mode .status-dot {
+    background: #39ff7a;
+    box-shadow: 0 0 4px #39ff7a, 0 0 10px rgba(57, 255, 122, 0.25);
+}
+
+body.dark-mode .logo-stamp {
+    mix-blend-mode: screen;
+    opacity: 0.25;
+    filter: drop-shadow(0 0 12px rgba(80, 50, 120, 0.3));
+}
+
+body.dark-mode .sp-group-label,
+body.dark-mode .hub-section-label .label-text {
+    color: #e0a8c0;
+    text-shadow:
+        0 0 6px rgba(200, 130, 160, 0.6),
+        0 0 18px rgba(160, 80, 120, 0.25);
+}
+
+body.dark-mode .no-disc {
+    text-shadow: 0 0 10px rgba(200, 170, 200, 0.35), 0 0 24px rgba(140, 80, 120, 0.15);
+}
+
+body.dark-mode .press-start {
+    color: rgba(224, 168, 192, 0.45);
+    text-shadow: 0 0 10px rgba(180, 100, 140, 0.2);
 }
 
 /* ── Startpage ── */

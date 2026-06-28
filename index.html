@@ -14,6 +14,8 @@
     <script src="scripts.js" defer></script>
 </head>
 <body>
+    <script>if(localStorage.getItem('pxyz-dark')==='true')document.body.classList.add('dark-mode')</script>
+    <div class="theme-overlay" aria-hidden="true"></div>
 
     <!-- Top chrome bar -->
     <header class="chrome-bar chrome-top">
@@ -86,11 +88,11 @@
                     <span class="item-fill"></span>
                     <span class="item-tag">DAT</span>
                 </a>
-                <a href="https://xyzserver.yak-diatonic.ts.net/" class="menu-item">
+                <a href="https://poglipi.yak-diatonic.ts.net:9090/p/hub.html" class="menu-item">
                     <span class="item-bullet">▸</span>
-                    <span class="item-label">CASA&nbsp;OS</span>
+                    <span class="item-label">SERVICE&nbsp;HUB</span>
                     <span class="item-fill"></span>
-                    <span class="item-tag">NET</span>
+                    <span class="item-tag">HUB</span>
                 </a>
                 <a href="https://poglipi.yak-diatonic.ts.net" class="menu-item">
                     <span class="item-bullet">▸</span>
@@ -126,6 +128,8 @@
         <span class="status-text" id="clock">--:--:--</span>
         <span class="chrome-sep">|</span>
         <span class="status-text">pogli.xyz</span>
+        <span class="chrome-sep">|</span>
+        <button class="theme-toggle">☾ NIGHT</button>
         <span class="chrome-sep">|</span>
         <span class="press-start">▸ PRESS START</span>
     </footer>

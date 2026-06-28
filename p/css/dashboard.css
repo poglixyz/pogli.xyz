@@ -843,6 +843,58 @@ body > * { position: relative; z-index: 1; }
     gap: 5px;
 }
 
+/* ── Theme toggle ── */
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    padding: 1px 8px;
+    cursor: pointer;
+    transition: color 0.5s ease, border-color 0.5s ease;
+    text-transform: uppercase;
+    line-height: 1.6;
+}
+
+.theme-toggle:hover {
+    color: var(--pink);
+    border-color: var(--border-strong);
+}
+
+/* ── Theme overlay ── */
+
+.theme-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0e0a1c;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+body.dark-mode .theme-overlay {
+    opacity: 1;
+}
+
+/* Dashboard is already dark — dark mode deepens it slightly */
+
+body.dark-mode::before {
+    background: rgba(4, 2, 12, 0.88);
+}
+
+body.dark-mode .chrome-bar {
+    background: rgba(4, 2, 12, 0.75);
+    transition: background 1s ease;
+}
+
+body.dark-mode .press-start {
+    color: rgba(196, 160, 220, 0.45);
+}
+
 /* ---- footer ---- */
 .footer {
     margin-top: 28px;

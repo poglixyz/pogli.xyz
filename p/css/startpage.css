@@ -25,6 +25,7 @@
         0 8px 48px rgba(100, 40, 160, 0.2),
         0 2px 12px rgba(163, 208, 255, 0.1);
     animation: frame-in 1.2s ease 0.3s both;
+    transition: background 1s ease, border-color 0.8s ease, box-shadow 1s ease;
 }
 
 /* gradient edge glow */
