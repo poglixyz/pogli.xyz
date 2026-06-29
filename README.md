@@ -1,1 +1,1 @@
-yo, this a website ive been maintaining & building since highschool lol. js is 99% stolen, i suck at it.
+yo, this a website i initially built on ms notepad & have been maintaining since highschool. js is 99% stolen, i suck at it.
