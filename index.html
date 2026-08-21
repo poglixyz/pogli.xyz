@@ -11,11 +11,67 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=DotGothic16&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="boot.css">
     <script src="scripts.js" defer></script>
+    <script src="boot.js" defer></script>
+
+    <!-- Boot gate. Runs before the body paints so the overlay is up on the
+         very first frame (no flash of the page underneath). Without JS the
+         class is never set and #bootscreen stays display:none. -->
+    <script>
+    (function () {
+        try {
+            if (sessionStorage.getItem('pxyz-booted')) return;
+            sessionStorage.setItem('pxyz-booted', '1');
+        } catch (e) { /* storage blocked — boot anyway, just don't remember */ }
+        var d = document.documentElement;
+        d.className += ' pxyz-boot pxyz-hold';
+        // If boot.js fails to load, don't leave the page frozen behind a dead overlay.
+        window.pxyzBootFailsafe = setTimeout(function () {
+            d.classList.remove('pxyz-boot');
+            d.classList.remove('pxyz-hold');
+        }, 9000);
+    })();
+    </script>
 </head>
 <body>
     <script>if(localStorage.getItem('pxyz-dark')==='true')document.body.classList.add('dark-mode')</script>
     <div class="theme-overlay" aria-hidden="true"></div>
+
+    <!-- ── Boot sequence overlay ──
+         Inert (display:none) unless boot.js is running: see boot.css. -->
+    <div id="bootscreen" class="boot" aria-hidden="true">
+        <div class="boot-crt">
+            <div class="boot-scan"></div>
+            <div class="boot-swoosh"></div>
+
+            <div class="boot-stage">
+                <section class="boot-post">
+                    <div class="post-head">
+                        <span class="post-brand">PXYZ SYSTEM BIOS</span>
+                        <span class="post-rev">REV 2.0</span>
+                    </div>
+                    <div class="post-copy">(C)&nbsp;2001-2026 POGLI INDUSTRIES.&nbsp;&nbsp;ALL RIGHTS RESERVED.</div>
+                    <div class="post-lines" id="boot-lines"></div>
+                    <div class="post-load" id="boot-load"></div>
+                </section>
+
+                <section class="boot-logo">
+                    <div class="boot-ring"></div>
+                    <div class="boot-ring boot-ring-2"></div>
+                    <div class="boot-logo-text"><span class="boot-char">P</span><span class="boot-char">O</span><span class="boot-char">G</span><span class="boot-char">L</span><span class="boot-char">I</span><span class="boot-char">.</span><span class="boot-char">X</span><span class="boot-char">Y</span><span class="boot-char">Z</span><span class="boot-gloss"></span></div>
+                    <div class="boot-bar"></div>
+                    <div class="boot-jp">システム起動</div>
+                    <div class="boot-licence">◆&nbsp;&nbsp;NTSC-J&nbsp;&nbsp;◆&nbsp;&nbsp;LICENSED BY POGLI INDUSTRIES&nbsp;&nbsp;◆</div>
+                </section>
+            </div>
+
+            <div class="boot-beam"></div>
+            <div class="boot-vignette"></div>
+            <div class="boot-flash"></div>
+        </div>
+        <div class="boot-skip">▸&nbsp;&nbsp;PRESS ANY BUTTON TO SKIP</div>
+    </div>
 
     <!-- Top chrome bar -->
     <header class="chrome-bar chrome-top">
@@ -131,7 +187,9 @@
         <span class="chrome-sep">|</span>
         <button class="theme-toggle">☾ NIGHT</button>
         <span class="chrome-sep">|</span>
-        <span class="press-start">▸ PRESS START</span>
+        <!-- Replays the boot sequence on demand (boot.js). Dead without JS,
+             same as the theme toggle above it. -->
+        <button type="button" class="press-start" title="Replay the boot sequence"><span aria-hidden="true">▸</span> PRESS START</button>
     </footer>
 
 </body>
