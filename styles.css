@@ -114,31 +114,29 @@ body::after {
 
 /* ── Press start ── */
 
-/* Replays the boot sequence (boot.js). It's a <button> for the keyboard, so
-   the UA's own button chrome has to be stripped back to the bare blinking
-   text it reads as. */
+/* It's a <button> so it can replay the boot sequence from the keyboard
+   (boot.js), but it must render as the plain blinking text it always was.
+   Everything here past the original four properties exists only to undo the
+   UA's form-control styling — font/line-height/text-transform/appearance are
+   all reset by the UA sheet on buttons, and left alone they shift the footer
+   by a pixel and drop 'Courier New' out of the fallback stack. Focus ring is
+   left to the browser: it shows on keyboard focus only, so the resting
+   appearance is untouched. */
 .press-start {
+    appearance: none;
+    -webkit-appearance: none;
     background: none;
     border: 0;
     padding: 0;
-    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    font: inherit;
+    text-transform: inherit;
+    cursor: pointer;
     font-size: 9px;
     letter-spacing: 0.18em;
-    line-height: 1.6;
-    cursor: pointer;
     color: rgba(255, 214, 255, 0.75);
     text-shadow: 0 0 10px rgba(255, 180, 255, 0.4);
-    transition: color 0.5s ease;
     animation: press-blink 2.8s ease-in-out infinite;
-}
-
-.press-start:hover {
-    color: var(--c-pink);
-}
-
-.press-start:focus-visible {
-    outline: 1px solid var(--c-border-hi);
-    outline-offset: 3px;
 }
 
 @keyframes press-blink {
