@@ -213,7 +213,7 @@
         }
 
         // Typed hand-off line under the self-test.
-        var LOAD_TEXT = '> LOADING SYSTEM MENU';
+        var LOAD_TEXT = '> LOADING sil.via ♡ v2.0';
         at(3300, function () {
             var i = 0;
             every(52, function (id) {
