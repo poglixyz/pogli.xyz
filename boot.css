@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════
    PXYZ BOOT SEQUENCE
-   Fantasy-console power-on: CRT snap → BIOS POST → logo lock.
+   Fantasy-console power-on: CRT warm-up → BIOS POST → logo lock.
    Loaded by index.html only. Every rule is inert until the inline
    head script adds .pxyz-boot to <html>, so no-JS visitors never
    see the overlay and never get locked out of the page.
@@ -36,6 +36,30 @@ html.pxyz-rewind .logo-stamp {
     animation: none;
 }
 
+/* ── Palette ──
+   The tube borrows the site's own colour tokens so it can never drift from
+   the brand pink. Declared on :root rather than on .boot deliberately:
+   body.dark-mode re-points --c-pink at a muted rose (#e0a8c0), and a
+   power-on should be the bright console pink whatever theme you're in.
+   Resolving the vars up on <html> takes the canonical values every time.
+
+   The steps below are alpha ramps of that same pink, so every tint on the
+   tube is the real colour rather than a hand-mixed near-miss. */
+:root {
+    --boot-pink: var(--c-pink);
+    --boot-blue: var(--c-blue);
+    --boot-ok:   #39ff7a;
+    --boot-warn: #ffc36b;
+
+    --boot-pink-80: color-mix(in srgb, var(--c-pink) 80%, transparent);
+    --boot-pink-55: color-mix(in srgb, var(--c-pink) 55%, transparent);
+    --boot-pink-38: color-mix(in srgb, var(--c-pink) 38%, transparent);
+    --boot-pink-20: color-mix(in srgb, var(--c-pink) 20%, transparent);
+    --boot-pink-10: color-mix(in srgb, var(--c-pink) 10%, transparent);
+    --boot-blue-55: color-mix(in srgb, var(--c-blue) 55%, transparent);
+    --boot-blue-30: color-mix(in srgb, var(--c-blue) 30%, transparent);
+}
+
 /* ── Overlay shell ── */
 
 .boot {
@@ -43,47 +67,105 @@ html.pxyz-rewind .logo-stamp {
     inset: 0;
     z-index: 9000;
     overflow: hidden;
-    background: #06030e;
+    background: #000;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
     font-family: 'JetBrains Mono', 'Courier New', monospace;
-    --boot-pink: #ffd6ff;
-    --boot-blue: #a3d0ff;
-    --boot-ok:   #39ff7a;
-    --boot-warn: #ffc36b;
 }
 
+/* ── The tube ──
+   Rounded so the corners fall away to the black behind it, which is most of
+   what sells "this is glass, not a div". */
 .boot-crt {
     position: absolute;
     inset: 0;
+    overflow: hidden;
+    border-radius: 22px;
     background:
-        radial-gradient(ellipse 90% 70% at 50% 45%, rgba(60, 22, 96, 0.55) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 45% at 50% 100%, rgba(30, 40, 110, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 92% 72% at 50% 45%, var(--boot-pink-10) 0%, transparent 68%),
+        radial-gradient(ellipse 74% 56% at 50% 46%, rgba(60, 22, 96, 0.5) 0%, transparent 72%),
+        radial-gradient(ellipse 60% 45% at 50% 100%, rgba(30, 40, 110, 0.32) 0%, transparent 70%),
         #06030e;
     transform-origin: 50% 50%;
-    animation: boot-flicker 5.5s linear infinite;
+    /* Cathode warm-up for the first beat, then settle into a mains hum. */
+    animation:
+        boot-warmup  1.15s ease-out,
+        boot-flicker 6.5s  linear 1.15s infinite;
+}
+
+/* the gun striking cold phosphor: overbright, sag, recover */
+@keyframes boot-warmup {
+    0%   { filter: brightness(2.3) saturate(0.35); }
+    11%  { filter: brightness(0.5) saturate(0.75); }
+    25%  { filter: brightness(1.55); }
+    42%  { filter: brightness(0.82); }
+    60%  { filter: brightness(1.16); }
+    78%  { filter: brightness(0.95); }
+    100% { filter: brightness(1); }
 }
 
 /* mains hum — a barely-there brightness wobble */
 @keyframes boot-flicker {
     0%, 100%      { filter: brightness(1);    }
-    3%            { filter: brightness(1.06); }
+    3%            { filter: brightness(1.05); }
     5%, 41%       { filter: brightness(0.99); }
-    43%           { filter: brightness(1.04); }
+    43%           { filter: brightness(1.03); }
     45%, 72%      { filter: brightness(1);    }
-    74%           { filter: brightness(0.96); }
+    74%           { filter: brightness(0.97); }
     76%           { filter: brightness(1);    }
+}
+
+/* ── Phosphor bloom ──
+   Warm haze sitting over the picture, breathing very slowly. Screen blend
+   so it lifts the lit areas instead of fogging the black. */
+.boot-bloom {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background:
+        radial-gradient(ellipse 72% 56% at 50% 46%, var(--boot-pink-20) 0%, transparent 72%),
+        radial-gradient(ellipse 40% 30% at 50% 48%, var(--boot-pink-10) 0%, transparent 80%);
+    animation: boot-breathe 7s ease-in-out infinite;
+}
+
+@keyframes boot-breathe {
+    0%, 100% { opacity: 0.75; }
+    50%      { opacity: 1;    }
+}
+
+/* ── Glass curvature ──
+   Corner falloff plus edge darkening reads as a bulged tube. Deliberately
+   not a real barrel filter: warping the picture would smear the POST text
+   into mush, which is the glitchy look we don't want. */
+.boot-curve {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+    border-radius: 22px;
+    background:
+        radial-gradient(ellipse 132% 110% at 50% 50%, transparent 56%, rgba(3, 1, 8, 0.85) 100%),
+        linear-gradient(100deg, rgba(255, 255, 255, 0.055) 0%, transparent 24%),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0%, transparent 18%);
+    box-shadow:
+        inset 0 0 70px 18px rgba(0, 0, 0, 0.5),
+        inset 0 0 180px 55px rgba(0, 0, 0, 0.3);
 }
 
 .boot-vignette {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(ellipse 78% 68% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+    background: radial-gradient(ellipse 76% 66% at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.8) 100%);
     z-index: 6;
 }
 
+/* ── Scanlines ──
+   Real dark gaps between the lines rather than a light wash — that's what
+   makes it read as an aperture grille instead of a texture overlay. */
 .boot-scan {
     position: absolute;
     inset: 0;
@@ -91,10 +173,10 @@ html.pxyz-rewind .logo-stamp {
     z-index: 5;
     background: repeating-linear-gradient(
         0deg,
-        rgba(255, 220, 255, 0.035) 0px,
-        rgba(255, 220, 255, 0.035) 1px,
-        transparent 1px,
-        transparent 3px
+        var(--boot-pink-10) 0px,
+        var(--boot-pink-10) 1px,
+        rgba(0, 0, 0, 0.26) 1px,
+        rgba(0, 0, 0, 0.26) 3px
     );
 }
 
@@ -105,13 +187,41 @@ html.pxyz-rewind .logo-stamp {
     left: 0;
     right: 0;
     height: 22%;
-    background: linear-gradient(180deg, transparent, rgba(255, 230, 255, 0.05), transparent);
-    animation: boot-roll 4.2s linear infinite;
+    background: linear-gradient(180deg, transparent, var(--boot-pink-10), transparent);
+    animation: boot-roll 5.4s linear infinite;
 }
 
 @keyframes boot-roll {
     from { transform: translateY(-30%); }
     to   { transform: translateY(460%); }
+}
+
+/* ── Retrace ──
+   The beam's return sweep: one bright hairline walking down the picture. */
+.boot-retrace {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    z-index: 6;
+    pointer-events: none;
+    opacity: 0.45;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--boot-pink-55) 14%,
+        rgba(255, 255, 255, 0.75) 50%,
+        var(--boot-blue-55) 86%,
+        transparent
+    );
+    box-shadow: 0 0 16px 3px var(--boot-pink-20);
+    animation: boot-retrace 3.8s linear infinite;
+}
+
+@keyframes boot-retrace {
+    from { transform: translateY(-4vh);  }
+    to   { transform: translateY(104vh); }
 }
 
 /* ── Power-on beam: hairline snaps across, then the tube opens ── */
@@ -123,18 +233,18 @@ html.pxyz-rewind .logo-stamp {
     top: 50%;
     height: 2px;
     margin-top: -1px;
-    z-index: 7;
+    z-index: 8;
     background: linear-gradient(90deg, transparent, #fff 18%, #fff 82%, transparent);
-    box-shadow: 0 0 26px 8px rgba(255, 214, 255, 0.85), 0 0 60px 18px rgba(163, 208, 255, 0.35);
+    box-shadow: 0 0 26px 8px var(--boot-pink-80), 0 0 60px 18px var(--boot-blue-30);
     transform-origin: 50% 50%;
-    animation: boot-beam 0.62s cubic-bezier(0.22, 0.8, 0.24, 1) both;
+    animation: boot-beam 1.05s cubic-bezier(0.22, 0.8, 0.24, 1) both;
 }
 
 @keyframes boot-beam {
-    0%   { opacity: 0; transform: scaleX(0)    scaleY(1);   }
-    10%  { opacity: 1; transform: scaleX(1)    scaleY(1);   }
-    28%  { opacity: 1; transform: scaleX(1)    scaleY(1.6); }
-    100% { opacity: 0; transform: scaleX(1)    scaleY(190); }
+    0%   { opacity: 0; transform: scaleX(0) scaleY(1);   }
+    9%   { opacity: 1; transform: scaleX(1) scaleY(1);   }
+    34%  { opacity: 1; transform: scaleX(1) scaleY(1.6); }
+    100% { opacity: 0; transform: scaleX(1) scaleY(190); }
 }
 
 /* ── Stage ── */
@@ -170,9 +280,9 @@ html.pxyz-rewind .logo-stamp {
     font-weight: 700;
     letter-spacing: 0.22em;
     color: rgba(255, 248, 255, 0.95);
-    text-shadow: 0 0 12px rgba(255, 180, 255, 0.55);
+    text-shadow: 0 0 12px var(--boot-pink-55);
     opacity: 0;
-    animation: post-fade 0.45s ease both;
+    animation: post-fade 0.55s ease both;
 }
 
 .post-rev {
@@ -180,19 +290,19 @@ html.pxyz-rewind .logo-stamp {
     font-weight: 400;
     letter-spacing: 0.2em;
     color: var(--boot-blue);
-    border: 1px solid rgba(163, 208, 255, 0.4);
+    border: 1px solid var(--boot-blue-30);
     padding: 1px 5px;
 }
 
 .post-copy {
     font-size: clamp(7px, 1.6vw, 8px);
     letter-spacing: 0.14em;
-    color: rgba(255, 220, 255, 0.4);
+    color: var(--boot-pink-38);
     margin: 6px 0 18px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 200, 255, 0.14);
+    border-bottom: 1px solid var(--boot-pink-20);
     opacity: 0;
-    animation: post-fade 0.45s ease 0.12s both;
+    animation: post-fade 0.55s ease 0.16s both;
 }
 
 @keyframes post-fade {
@@ -212,12 +322,12 @@ html.pxyz-rewind .logo-stamp {
     gap: 8px;
     font-size: clamp(8px, 1.9vw, 10px);
     letter-spacing: 0.13em;
-    color: rgba(255, 240, 255, 0.82);
+    color: rgba(255, 240, 255, 0.85);
     opacity: 0;
 }
 
 .post-line.on {
-    animation: post-line-in 0.34s ease both;
+    animation: post-line-in 0.42s ease both;
 }
 
 @keyframes post-line-in {
@@ -232,11 +342,11 @@ html.pxyz-rewind .logo-stamp {
     flex: 1;
     height: 1px;
     min-width: 12px;
-    opacity: 0.45;
+    opacity: 0.5;
     background: repeating-linear-gradient(
         90deg,
-        rgba(255, 200, 255, 0.5) 0px,
-        rgba(255, 200, 255, 0.5) 2px,
+        var(--boot-pink-55) 0px,
+        var(--boot-pink-55) 2px,
         transparent 2px,
         transparent 7px
     );
@@ -255,7 +365,7 @@ html.pxyz-rewind .logo-stamp {
     font-weight: 700;
     letter-spacing: 0.16em;
     opacity: 0;
-    transition: opacity 0.18s ease;
+    transition: opacity 0.22s ease;
 }
 
 .pl-stat.on   { opacity: 1; }
@@ -268,12 +378,12 @@ html.pxyz-rewind .logo-stamp {
     font-size: clamp(8px, 1.9vw, 10px);
     letter-spacing: 0.16em;
     color: var(--boot-pink);
-    text-shadow: 0 0 10px rgba(255, 180, 255, 0.5);
+    text-shadow: 0 0 10px var(--boot-pink-55), 0 0 26px var(--boot-pink-20);
 }
 
 .post-load::after {
     content: '\2588';
-    animation: post-caret 0.75s steps(1) infinite;
+    animation: post-caret 0.8s steps(1) infinite;
 }
 
 @keyframes post-caret {
@@ -283,7 +393,7 @@ html.pxyz-rewind .logo-stamp {
 
 /* POST clears out when the logo takes the screen */
 .boot.phase-logo .boot-post {
-    animation: post-out 0.38s ease forwards;
+    animation: post-out 0.5s ease forwards;
 }
 
 @keyframes post-out {
@@ -302,24 +412,28 @@ html.pxyz-rewind .logo-stamp {
     background: linear-gradient(
         104deg,
         transparent 36%,
-        rgba(255, 214, 255, 0.45) 45%,
-        rgba(255, 255, 255, 0.8)  50%,
-        rgba(163, 208, 255, 0.45) 55%,
+        var(--boot-pink-55) 45%,
+        rgba(255, 255, 255, 0.8) 50%,
+        var(--boot-blue-55) 55%,
         transparent 64%
     );
 }
 
 .boot.phase-logo .boot-swoosh {
-    animation: boot-swoosh 0.9s cubic-bezier(0.32, 0, 0.16, 1) both;
+    animation: boot-swoosh 1.15s cubic-bezier(0.32, 0, 0.16, 1) both;
 }
 
 @keyframes boot-swoosh {
-    0%   { opacity: 0;   transform: translateX(-115%); }
+    0%   { opacity: 0; transform: translateX(-115%); }
     18%  { opacity: 1; }
-    100% { opacity: 0;   transform: translateX(115%);  }
+    100% { opacity: 0; transform: translateX(115%);  }
 }
 
-/* ── Logo lock-in ── */
+/* ══ Logo lock-in ══
+   The console-logo moment. Each glyph strikes the phosphor as a blown-out
+   horizontal smear, the beam collapses it into the letter, and the bloom
+   decays as it settles — then a shine pass rakes across the finished
+   wordmark. No flying in from off-screen, no per-letter scatter. */
 
 .boot-logo {
     grid-area: 1 / 1;
@@ -332,6 +446,34 @@ html.pxyz-rewind .logo-stamp {
 
 .boot.phase-logo .boot-logo { opacity: 1; }
 
+/* phosphor charge behind the wordmark: blooms wide, then decays to a glow */
+.boot-logo-glow {
+    position: absolute;
+    left: 50%;
+    top: 34%;
+    width: min(700px, 92vw);
+    height: 220px;
+    margin-left: calc(min(700px, 92vw) / -2);
+    margin-top: -110px;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: screen;
+    background:
+        radial-gradient(ellipse 60% 44% at 50% 50%, var(--boot-pink-55) 0%, transparent 72%),
+        radial-gradient(ellipse 90% 22% at 50% 50%, var(--boot-blue-30) 0%, transparent 78%);
+}
+
+.boot.phase-logo .boot-logo-glow {
+    animation: boot-logo-bloom 1.9s cubic-bezier(0.2, 0.8, 0.3, 1) 0.06s both;
+}
+
+@keyframes boot-logo-bloom {
+    0%   { opacity: 0;    transform: scale(0.35, 0.04); filter: blur(2px);  }
+    16%  { opacity: 1;    transform: scale(1.08, 0.72); filter: blur(0);    }
+    46%  { opacity: 0.62; transform: scale(1, 1);       }
+    100% { opacity: 0.3;  transform: scale(1, 1);       }
+}
+
 .boot-ring {
     position: absolute;
     left: 50%;
@@ -340,19 +482,19 @@ html.pxyz-rewind .logo-stamp {
     height: 44px;
     margin: -22px 0 0 -22px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 214, 255, 0.85);
-    box-shadow: 0 0 26px rgba(255, 180, 255, 0.55), inset 0 0 18px rgba(255, 214, 255, 0.4);
+    border: 2px solid var(--boot-pink-80);
+    box-shadow: 0 0 26px var(--boot-pink-55), inset 0 0 18px var(--boot-pink-38);
     opacity: 0;
     pointer-events: none;
 }
 
 .boot-ring-2 {
-    border-color: rgba(163, 208, 255, 0.8);
-    box-shadow: 0 0 26px rgba(140, 200, 255, 0.5), inset 0 0 18px rgba(163, 208, 255, 0.35);
+    border-color: var(--boot-blue-55);
+    box-shadow: 0 0 26px var(--boot-blue-30), inset 0 0 18px var(--boot-blue-30);
 }
 
-.boot.phase-logo .boot-ring   { animation: boot-ring 1s cubic-bezier(0.14, 0.78, 0.26, 1) 0.1s both; }
-.boot.phase-logo .boot-ring-2 { animation: boot-ring 1.1s cubic-bezier(0.14, 0.78, 0.26, 1) 0.26s both; }
+.boot.phase-logo .boot-ring   { animation: boot-ring 1.3s cubic-bezier(0.14, 0.78, 0.26, 1) 0.08s both; }
+.boot.phase-logo .boot-ring-2 { animation: boot-ring 1.4s cubic-bezier(0.14, 0.78, 0.26, 1) 0.3s  both; }
 
 @keyframes boot-ring {
     0%   { opacity: 0;    transform: scale(0.15); border-width: 3px;   }
@@ -370,68 +512,88 @@ html.pxyz-rewind .logo-stamp {
     white-space: nowrap;
 }
 
+/* the tube locking on to the finished wordmark */
+.boot.phase-logo .boot-logo-text {
+    animation: boot-logo-settle 1.05s cubic-bezier(0.24, 1.3, 0.36, 1) 0.74s both;
+}
+
+@keyframes boot-logo-settle {
+    0%   { transform: scale(1, 1);         }
+    26%  { transform: scale(0.992, 1.045); }
+    58%  { transform: scale(1.005, 0.986); }
+    100% { transform: scale(1, 1);         }
+}
+
 .boot-char {
     display: inline-block;
     color: #fff;
-    transform-origin: 50% 60%;
+    transform-origin: 50% 55%;
 }
 
 /* pink → white → blue ramp across the wordmark, one solid colour per glyph.
    (per-char background-clip:text would run a full gradient inside every
-   letter; solid steps read as one gradient and survive transforms.) */
-.boot-char:nth-child(1) { color: #ffd6ff; }
-.boot-char:nth-child(2) { color: #ffe0ff; }
-.boot-char:nth-child(3) { color: #ffeaff; }
-.boot-char:nth-child(4) { color: #fff4ff; }
+   letter; solid steps read as one gradient and survive transforms.)
+   Mixed from the site tokens so the two ends are always the real brand
+   pink and blue, whatever the theme does to them further down the page. */
+.boot-char:nth-child(1) { color: var(--boot-pink); }
+.boot-char:nth-child(2) { color: color-mix(in srgb, var(--boot-pink), #fff 25%); }
+.boot-char:nth-child(3) { color: color-mix(in srgb, var(--boot-pink), #fff 50%); }
+.boot-char:nth-child(4) { color: color-mix(in srgb, var(--boot-pink), #fff 75%); }
 .boot-char:nth-child(5) { color: #ffffff; }
-.boot-char:nth-child(6) { color: #eef2ff; }
-.boot-char:nth-child(7) { color: #d9e7ff; }
-.boot-char:nth-child(8) { color: #bedcff; }
-.boot-char:nth-child(9) { color: #a3d0ff; }
+.boot-char:nth-child(6) { color: color-mix(in srgb, var(--boot-blue), #fff 75%); }
+.boot-char:nth-child(7) { color: color-mix(in srgb, var(--boot-blue), #fff 50%); }
+.boot-char:nth-child(8) { color: color-mix(in srgb, var(--boot-blue), #fff 25%); }
+.boot-char:nth-child(9) { color: var(--boot-blue); }
 
-.boot-char:nth-child(-n+5) { text-shadow: 0 0 14px rgba(255, 160, 255, 0.75), 0 0 42px rgba(255, 120, 255, 0.35); }
-.boot-char:nth-child(n+6)  { text-shadow: 0 0 14px rgba(140, 200, 255, 0.75), 0 0 42px rgba(90, 160, 255, 0.35); }
+.boot-char:nth-child(-n+5) { text-shadow: 0 0 14px var(--boot-pink-80), 0 0 44px var(--boot-pink-38); }
+.boot-char:nth-child(n+6)  { text-shadow: 0 0 14px var(--boot-blue-55), 0 0 44px var(--boot-blue-30); }
 
 .boot.phase-logo .boot-char {
-    animation: boot-char-in 0.66s cubic-bezier(0.17, 1.12, 0.32, 1) both;
+    animation: boot-char-strike 0.72s cubic-bezier(0.18, 0.86, 0.24, 1) both;
 }
 
-@keyframes boot-char-in {
-    0%   { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--rz)) scale(0.35); filter: blur(5px) brightness(2.6); }
-    55%  { opacity: 1; }
-    100% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1);                          filter: blur(0)   brightness(1); }
+/* smear → collapse → overshoot → settle, with the bloom burning off */
+@keyframes boot-char-strike {
+    0%   { opacity: 0; transform: scale(2.5, 0.04);  filter: blur(7px)   brightness(3.4) saturate(0.3); }
+    20%  { opacity: 1; transform: scale(1.38, 0.46); filter: blur(4px)   brightness(2.8) saturate(0.6); }
+    46%  { opacity: 1; transform: scale(0.965, 1.13); filter: blur(1.1px) brightness(1.9); }
+    68%  {             transform: scale(1.03, 0.965); filter: blur(0)     brightness(1.35); }
+    86%  {             transform: scale(0.995, 1.012); }
+    100% { opacity: 1; transform: scale(1, 1);        filter: blur(0)     brightness(1); }
 }
 
-/* Scatter origins + stagger. These must out-specify the `animation`
-   shorthand above (which resets delay to 0), hence the .boot.phase-logo
-   prefix rather than a bare .boot-char:nth-child(). */
-.boot.phase-logo .boot-char:nth-child(1) { --tx: -0.9em; --ty: -1.3em; --rz: -38deg; animation-delay: 0.10s; }
-.boot.phase-logo .boot-char:nth-child(2) { --tx:  0.7em; --ty:  1.4em; --rz:  30deg; animation-delay: 0.17s; }
-.boot.phase-logo .boot-char:nth-child(3) { --tx: -1.2em; --ty:  1.1em; --rz:  24deg; animation-delay: 0.24s; }
-.boot.phase-logo .boot-char:nth-child(4) { --tx:  1.1em; --ty: -1.5em; --rz: -27deg; animation-delay: 0.31s; }
-.boot.phase-logo .boot-char:nth-child(5) { --tx: -0.5em; --ty:  1.6em; --rz:  40deg; animation-delay: 0.38s; }
-.boot.phase-logo .boot-char:nth-child(6) { --tx:  0.2em; --ty: -1.9em; --rz: -14deg; animation-delay: 0.45s; }
-.boot.phase-logo .boot-char:nth-child(7) { --tx:  1.4em; --ty:  1.2em; --rz:  33deg; animation-delay: 0.52s; }
-.boot.phase-logo .boot-char:nth-child(8) { --tx: -1.0em; --ty: -1.2em; --rz: -31deg; animation-delay: 0.59s; }
-.boot.phase-logo .boot-char:nth-child(9) { --tx:  1.3em; --ty:  1.5em; --rz:  22deg; animation-delay: 0.66s; }
+/* Stagger. Must out-specify the `animation` shorthand above (which resets
+   delay to 0), hence the .boot.phase-logo prefix rather than a bare
+   .boot-char:nth-child(). */
+.boot.phase-logo .boot-char:nth-child(1) { animation-delay: 0.06s; }
+.boot.phase-logo .boot-char:nth-child(2) { animation-delay: 0.14s; }
+.boot.phase-logo .boot-char:nth-child(3) { animation-delay: 0.22s; }
+.boot.phase-logo .boot-char:nth-child(4) { animation-delay: 0.30s; }
+.boot.phase-logo .boot-char:nth-child(5) { animation-delay: 0.38s; }
+.boot.phase-logo .boot-char:nth-child(6) { animation-delay: 0.46s; }
+.boot.phase-logo .boot-char:nth-child(7) { animation-delay: 0.54s; }
+.boot.phase-logo .boot-char:nth-child(8) { animation-delay: 0.62s; }
+.boot.phase-logo .boot-char:nth-child(9) { animation-delay: 0.70s; }
 
-/* glossy highlight raking across the finished wordmark */
+/* shine pass raking across the finished wordmark */
 .boot-gloss {
     position: absolute;
-    inset: -20% -40%;
+    inset: -20% -45%;
     pointer-events: none;
     opacity: 0;
     mix-blend-mode: screen;
     background: linear-gradient(
         104deg,
-        transparent 42%,
-        rgba(255, 255, 255, 0.72) 50%,
-        transparent 58%
+        transparent 38%,
+        rgba(255, 255, 255, 0.28) 46%,
+        rgba(255, 255, 255, 0.85) 50%,
+        rgba(255, 255, 255, 0.28) 54%,
+        transparent 62%
     );
 }
 
 .boot.phase-logo .boot-gloss {
-    animation: boot-gloss 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.82s both;
+    animation: boot-gloss 1.1s cubic-bezier(0.4, 0, 0.2, 1) 1.25s both;
 }
 
 @keyframes boot-gloss {
@@ -445,11 +607,11 @@ html.pxyz-rewind .logo-stamp {
     height: 2px;
     margin-top: 14px;
     background: linear-gradient(90deg, var(--boot-pink), #fff, var(--boot-blue));
-    box-shadow: 0 0 14px rgba(255, 200, 255, 0.5);
+    box-shadow: 0 0 14px var(--boot-pink-55);
 }
 
 .boot.phase-logo .boot-bar {
-    animation: boot-bar 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.72s both;
+    animation: boot-bar 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.15s both;
 }
 
 @keyframes boot-bar {
@@ -462,7 +624,8 @@ html.pxyz-rewind .logo-stamp {
     font-size: clamp(9px, 2.2vw, 12px);
     letter-spacing: 0.28em;
     margin-top: 14px;
-    color: rgba(255, 214, 255, 0.62);
+    color: var(--boot-pink-80);
+    text-shadow: 0 0 12px var(--boot-pink-38);
     opacity: 0;
 }
 
@@ -470,13 +633,13 @@ html.pxyz-rewind .logo-stamp {
     font-size: clamp(7px, 1.6vw, 8px);
     letter-spacing: 0.24em;
     margin-top: 10px;
-    color: rgba(255, 235, 255, 0.42);
+    color: var(--boot-pink-55);
     text-transform: uppercase;
     opacity: 0;
 }
 
-.boot.phase-logo .boot-jp      { animation: post-fade 0.6s ease 0.9s both;  }
-.boot.phase-logo .boot-licence { animation: post-fade 0.6s ease 1.05s both; }
+.boot.phase-logo .boot-jp      { animation: post-fade 0.7s ease 1.6s both;  }
+.boot.phase-logo .boot-licence { animation: post-fade 0.7s ease 1.85s both; }
 
 /* ── Skip hint ── */
 
@@ -485,14 +648,14 @@ html.pxyz-rewind .logo-stamp {
     left: 0;
     right: 0;
     bottom: 26px;
-    z-index: 8;
+    z-index: 9;
     text-align: center;
     font-size: 8px;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(255, 214, 255, 0.4);
+    color: var(--boot-pink-55);
     opacity: 0;
-    animation: boot-skip-in 0.6s ease 1.4s both, press-blink 2.8s ease-in-out 1.4s infinite;
+    animation: boot-skip-in 0.6s ease 1.6s both, press-blink 2.8s ease-in-out 1.6s infinite;
 }
 
 @keyframes boot-skip-in {
@@ -505,7 +668,7 @@ html.pxyz-rewind .logo-stamp {
 .boot-flash {
     position: absolute;
     inset: 0;
-    z-index: 9;
+    z-index: 10;
     background: #fff;
     opacity: 0;
     pointer-events: none;
@@ -513,20 +676,20 @@ html.pxyz-rewind .logo-stamp {
 
 #bootscreen.boot-out {
     pointer-events: none;
-    animation: boot-bg-out 0.46s ease 0.2s forwards;
+    animation: boot-bg-out 0.6s ease 0.28s forwards;
 }
 
-#bootscreen.boot-out .boot-crt  { animation: boot-crt-off 0.34s cubic-bezier(0.55, 0, 0.85, 0.2) forwards; }
-#bootscreen.boot-out .boot-skip { animation: boot-skip-out 0.12s ease forwards; }
-#bootscreen.boot-out .boot-flash{ animation: boot-final-flash 0.42s ease forwards; }
+#bootscreen.boot-out .boot-crt  { animation: boot-crt-off 0.46s cubic-bezier(0.55, 0, 0.85, 0.2) forwards; }
+#bootscreen.boot-out .boot-skip { animation: boot-skip-out 0.14s ease forwards; }
+#bootscreen.boot-out .boot-flash{ animation: boot-final-flash 0.55s ease forwards; }
 
 @keyframes boot-bg-out {
     to { opacity: 0; }
 }
 
 @keyframes boot-crt-off {
-    0%   { transform: scale(1, 1);       }
-    60%  { transform: scale(1, 0.012);   }
+    0%   { transform: scale(1, 1);        }
+    62%  { transform: scale(1, 0.012);    }
     100% { transform: scale(0.25, 0.006); opacity: 0; }
 }
 
@@ -550,18 +713,22 @@ html.pxyz-rewind .logo-stamp {
 
 .boot.boot-reduced .boot-beam,
 .boot.boot-reduced .boot-scan,
+.boot.boot-reduced .boot-retrace,
 .boot.boot-reduced .boot-swoosh,
 .boot.boot-reduced .boot-ring,
 .boot.boot-reduced .boot-gloss,
+.boot.boot-reduced .boot-logo-glow,
 .boot.boot-reduced .boot-post { display: none; }
 
-.boot.boot-reduced .boot-crt   { animation: none; }
-.boot.boot-reduced .boot-logo  { opacity: 1; }
-.boot.boot-reduced .boot-char  { animation: none; opacity: 1; }
-.boot.boot-reduced .boot-bar   { animation: none; opacity: 1; width: 78%; }
+.boot.boot-reduced .boot-crt       { animation: none; }
+.boot.boot-reduced .boot-bloom     { animation: none; }
+.boot.boot-reduced .boot-logo      { opacity: 1; }
+.boot.boot-reduced .boot-logo-text { animation: none; }
+.boot.boot-reduced .boot-char      { animation: none; opacity: 1; }
+.boot.boot-reduced .boot-bar       { animation: none; opacity: 1; width: 78%; }
 .boot.boot-reduced .boot-jp,
-.boot.boot-reduced .boot-licence { animation: none; opacity: 1; }
-.boot.boot-reduced .boot-skip  { animation: none; opacity: 0; }
+.boot.boot-reduced .boot-licence   { animation: none; opacity: 1; }
+.boot.boot-reduced .boot-skip      { animation: none; opacity: 0; }
 
 /* Belt and braces: if JS somehow misses the reduced-motion branch, the
    moving parts still stay still. The exit fade on #bootscreen is left
@@ -569,10 +736,14 @@ html.pxyz-rewind .logo-stamp {
 @media (prefers-reduced-motion: reduce) {
     .boot .boot-crt,
     .boot .boot-beam,
+    .boot .boot-bloom,
+    .boot .boot-retrace,
     .boot .boot-scan::after,
     .boot .boot-swoosh,
     .boot .boot-ring,
     .boot .boot-gloss,
+    .boot .boot-logo-glow,
+    .boot .boot-logo-text,
     .boot .boot-char,
     .boot .boot-bar,
     .boot .boot-skip,

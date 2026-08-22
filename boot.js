@@ -87,11 +87,13 @@
             root.classList.remove('pxyz-hold');
             bootEl.classList.add(cut ? 'boot-cut' : 'boot-out');
 
+            // Long enough to outlast the exit animation in boot.css: the
+            // collapse fade runs 0.6s behind a 0.28s delay.
             setTimeout(function () {
                 if (bootEl.parentNode) bootEl.parentNode.removeChild(bootEl);
                 root.classList.remove('pxyz-boot');
                 running = false;
-            }, cut ? 320 : 720);
+            }, cut ? 320 : 900);
         }
 
         // ── Skip on any input ──
@@ -120,10 +122,11 @@
         at(0, bindSkip);
 
         // ── Reduced motion: show the wordmark for a beat, then fade ──
+        // Stays short on purpose — the point is to not sit through motion.
         if (reduced) {
             bootEl.classList.add('boot-reduced');
             bootEl.classList.add('phase-logo');
-            at(420, function () { reveal(true); });
+            at(700, function () { reveal(true); });
             return;
         }
 
@@ -175,11 +178,15 @@
         });
 
         // ── Timeline ──
-        var LINE_STEP  = 130;   // gap between self-test lines
-        var LINE_START = 520;
-        var STAMP_LAG  = 250;   // OK/SKIP lands after the line settles
+        // Paced so each phase gets room to be watched rather than glimpsed:
+        // tube warm-up to ~1s, self-test through ~3.1s, hand-off line to
+        // ~4.4s, wordmark from 4.65s with ~400ms of hold at the end, then the
+        // power-off collapse. Roughly 8.3s door to door, skippable throughout.
+        var LINE_STEP  = 215;   // gap between self-test lines
+        var LINE_START = 1050;
+        var STAMP_LAG  = 300;   // OK/SKIP lands after the line settles
 
-        at(380, function () { bootEl.classList.add('phase-post'); });
+        at(700, function () { bootEl.classList.add('phase-post'); });
 
         POST.forEach(function (row, i) {
             var t = LINE_START + i * LINE_STEP;
@@ -191,12 +198,13 @@
             }
         });
 
-        // Memory check counter — ticks up to 512K, then stamps OK.
+        // Memory check counter — ticks up to 512K, then stamps OK. Runs long
+        // enough to read as a real count rather than a blur.
         if (memLine > -1) {
-            at(LINE_START + memLine * LINE_STEP + 90, function () {
+            at(LINE_START + memLine * LINE_STEP + 130, function () {
                 var value = 0;
-                every(11, function (id) {
-                    value = Math.min(MEM_TOTAL, value + 8);
+                every(13, function (id) {
+                    value = Math.min(MEM_TOTAL, value + 4);
                     memEl.textContent = pad(value, 6) + 'K';
                     if (value >= MEM_TOTAL) {
                         clearInterval(id);
@@ -208,20 +216,21 @@
 
         // Typed hand-off line under the self-test.
         var LOAD_TEXT = '> LOADING SYSTEM MENU';
-        at(1700, function () {
+        at(3300, function () {
             var i = 0;
-            every(34, function (id) {
+            every(52, function (id) {
                 i++;
                 loadEl.textContent = LOAD_TEXT.slice(0, i);
                 if (i >= LOAD_TEXT.length) clearInterval(id);
             });
         });
 
-        // Wordmark takes the screen.
-        at(2080, function () { bootEl.classList.add('phase-logo'); });
+        // Wordmark takes the screen. Its own animations run ~2.4s from here.
+        at(4650, function () { bootEl.classList.add('phase-logo'); });
 
-        // Power off into the site.
-        at(3500, function () { reveal(false); });
+        // Power off into the site, after a beat of the finished logo just
+        // sitting there — that pause is the console-logo moment.
+        at(7450, function () { reveal(false); });
     }
 
     // ── Entry points ──
