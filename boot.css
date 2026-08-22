@@ -284,6 +284,13 @@ html.pxyz-rewind .logo-stamp {
     animation: post-fade 0.55s ease both;
 }
 
+/* The sil.via ♡ wordmark keeps its lowercase styling inside the all-caps POST. */
+.post-brand,
+.post-rev,
+.post-load {
+    text-transform: none;
+}
+
 .post-rev {
     font-size: 8px;
     font-weight: 400;
