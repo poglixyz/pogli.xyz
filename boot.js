@@ -1,13 +1,11 @@
 // ── PXYZ boot sequence ──
 // Powers on the fantasy console: CRT snap, BIOS self-test, logo lock, hand-off.
-// The overlay markup lives in index.html but is display:none until the inline
-// head script flags <html class="pxyz-boot">, so no-JS visitors get the plain
-// page and this file is the only thing that can ever put the overlay on screen.
+// The overlay markup lives in index.html but is display:none (see boot.css)
+// until this file flags <html class="pxyz-boot">, so no-JS visitors — and
+// everyone on a normal page load — just get the plain page.
 //
-// Two ways in: the cold-load play (the head script's session gate decides
-// whether it happens) and the footer's PRESS START control, which re-runs the
-// sequence on demand. The gate only suppresses the automatic play — asking for
-// the boot by hand always works.
+// The only way in is the footer's PRESS START control, which runs the
+// sequence on demand via replay().
 (function () {
     'use strict';
 
@@ -242,16 +240,15 @@
         run(bootEl);
     }
 
-    // Manual re-run from the footer control. Deliberately ignores the session
-    // gate: that gate exists to stop the animation replaying on every
-    // navigation, not to stop someone asking for it.
+    // Manual re-run from the footer control — the only way the sequence ever
+    // plays now that there's no automatic cold-load boot.
     function replay() {
         if (running) return;
 
-        // Clear out whatever overlay is still in the document — the untouched
-        // original if this load was gated, nothing once a run has torn its own
-        // copy down — then work from a clean clone. Also keeps #bootscreen a
-        // unique id at all times.
+        // Clear out whatever overlay copy is still in the document — nothing,
+        // on a first press, since the original markup was never armed — then
+        // work from a clean clone. Also keeps #bootscreen a unique id at all
+        // times across repeated presses.
         var stale = document.getElementById('bootscreen');
         if (stale && stale.parentNode) stale.parentNode.removeChild(stale);
 
@@ -276,14 +273,4 @@
     // and the accessible role all come for free.
     var replayBtn = document.querySelector('.press-start');
     if (replayBtn) replayBtn.addEventListener('click', replay);
-
-    // ── Cold load ──
-    // Only the head script's gate flags the document. No flag means this
-    // session already booted (or storage said so), so the page is up and we
-    // just sit waiting for PRESS START.
-    if (root.classList.contains('pxyz-boot')) {
-        // We're alive, so the "boot.js never loaded" escape hatch isn't needed.
-        clearTimeout(window.pxyzBootFailsafe);
-        start(liveEl);
-    }
 })();
