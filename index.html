@@ -14,25 +14,6 @@
     <link rel="stylesheet" href="boot.css">
     <script src="scripts.js" defer></script>
     <script src="boot.js" defer></script>
-
-    <!-- Boot gate. Runs before the body paints so the overlay is up on the
-         very first frame (no flash of the page underneath). Without JS the
-         class is never set and #bootscreen stays display:none. -->
-    <script>
-    (function () {
-        try {
-            if (sessionStorage.getItem('pxyz-booted')) return;
-            sessionStorage.setItem('pxyz-booted', '1');
-        } catch (e) { /* storage blocked — boot anyway, just don't remember */ }
-        var d = document.documentElement;
-        d.className += ' pxyz-boot pxyz-hold';
-        // If boot.js fails to load, don't leave the page frozen behind a dead overlay.
-        window.pxyzBootFailsafe = setTimeout(function () {
-            d.classList.remove('pxyz-boot');
-            d.classList.remove('pxyz-hold');
-        }, 9000);
-    })();
-    </script>
 </head>
 <body>
     <script>if(localStorage.getItem('pxyz-dark')==='true')document.body.classList.add('dark-mode')</script>

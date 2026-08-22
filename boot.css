@@ -1,9 +1,10 @@
 /* ══════════════════════════════════════════════════════════════
    PXYZ BOOT SEQUENCE
    Fantasy-console power-on: CRT warm-up → BIOS POST → logo lock.
-   Loaded by index.html only. Every rule is inert until the inline
-   head script adds .pxyz-boot to <html>, so no-JS visitors never
-   see the overlay and never get locked out of the page.
+   Loaded by index.html only. Every rule is inert until boot.js adds
+   .pxyz-boot to <html> — which only happens via the footer PRESS
+   START control — so #bootscreen otherwise stays display:none and
+   the page just loads straight into its normal state.
    ══════════════════════════════════════════════════════════════ */
 
 /* ── Gating ── */
@@ -12,8 +13,8 @@
 html.pxyz-boot #bootscreen { display: block; }
 
 /* Hold the page's own entrance animations at frame zero while the boot
-   screen is up, so the menu stagger fires on reveal instead of playing
-   out unseen behind the overlay. Pausing freezes the delay too. */
+   screen is up (replay only), so the menu stagger fires on reveal instead
+   of playing out unseen behind the overlay. Pausing freezes the delay too. */
 html.pxyz-hold .console-wrap,
 html.pxyz-hold .console-frame,
 html.pxyz-hold .menu-item,
@@ -75,13 +76,12 @@ html.pxyz-rewind .logo-stamp {
 }
 
 /* ── The tube ──
-   Rounded so the corners fall away to the black behind it, which is most of
-   what sells "this is glass, not a div". */
+   Square to match the page frame it hands off to — no radius mismatch
+   between the boot screen and the console frame underneath it. */
 .boot-crt {
     position: absolute;
     inset: 0;
     overflow: hidden;
-    border-radius: 22px;
     background:
         radial-gradient(ellipse 92% 72% at 50% 45%, var(--boot-pink-10) 0%, transparent 68%),
         radial-gradient(ellipse 74% 56% at 50% 46%, rgba(60, 22, 96, 0.5) 0%, transparent 72%),
@@ -145,7 +145,6 @@ html.pxyz-rewind .logo-stamp {
     inset: 0;
     z-index: 7;
     pointer-events: none;
-    border-radius: 22px;
     background:
         radial-gradient(ellipse 132% 110% at 50% 50%, transparent 56%, rgba(3, 1, 8, 0.85) 100%),
         linear-gradient(100deg, rgba(255, 255, 255, 0.055) 0%, transparent 24%),
