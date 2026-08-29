@@ -1,5 +1,8 @@
 // ── PXYZ boot sequence ──
-// Powers on the fantasy console: CRT snap, BIOS self-test, logo lock, hand-off.
+// Remembers the fantasy console rather than powering it on: the dusk haze
+// comes into focus, the self-test reads itself back, the wordmark surfaces,
+// and the whole thing dissolves into the page. Everything is paced for long
+// cross-fades — see boot.css for the matching easings.
 // The overlay markup lives in index.html but is display:none (see boot.css)
 // until this file flags <html class="pxyz-boot">, so no-JS visitors — and
 // everyone on a normal page load — just get the plain page.
@@ -38,6 +41,12 @@
 
     var MEM_TOTAL = 512;
 
+    // Hard backstop. If the timeline somehow never reaches its own hand-off —
+    // a throttled background tab, a handler that threw part-way through — the
+    // overlay still gets out of the way rather than sitting over the page.
+    // Set well past the end of the sequence so a normal run never trips it.
+    var FAILSAFE_MS = 14000;
+
     function pad(n, width) {
         var s = String(n);
         while (s.length < width) s = '0' + s;
@@ -70,8 +79,9 @@
         }
 
         // ── Reveal / hand-off ──
-        // `cut` = user skipped or reduced motion: straight fade.
-        // otherwise: CRT power-off collapse with a flash.
+        // `cut` = user skipped or reduced motion: quick soft fade.
+        // otherwise: the slow dissolve — warm light up, picture out of focus,
+        // page already sitting underneath.
         function reveal(cut) {
             if (done) return;
             done = true;
@@ -81,17 +91,17 @@
             // Release the page's entrance animations at the same instant the
             // overlay starts clearing. The console frame's own 0.3s delay then
             // runs underneath the fade, so it's already materialising as the
-            // boot screen collapses and the menu stagger follows straight on.
+            // boot screen softens away and the menu stagger follows straight on.
             root.classList.remove('pxyz-hold');
             bootEl.classList.add(cut ? 'boot-cut' : 'boot-out');
 
             // Long enough to outlast the exit animation in boot.css: the
-            // collapse fade runs 0.6s behind a 0.28s delay.
+            // dissolve runs 1.15s, the cut 0.34s.
             setTimeout(function () {
                 if (bootEl.parentNode) bootEl.parentNode.removeChild(bootEl);
                 root.classList.remove('pxyz-boot');
                 running = false;
-            }, cut ? 320 : 900);
+            }, cut ? 380 : 1200);
         }
 
         // ── Skip on any input ──
@@ -118,6 +128,11 @@
         // started. Going through `at` means an early reveal cancels the bind
         // instead of racing it.
         at(0, bindSkip);
+
+        // Deliberately outside `timers`, so clearAll() can't take the backstop
+        // with it. reveal() is idempotent, so on any normal finish this is a
+        // no-op that fires into an already-done run.
+        setTimeout(function () { reveal(true); }, FAILSAFE_MS);
 
         // ── Reduced motion: show the wordmark for a beat, then fade ──
         // Stays short on purpose — the point is to not sit through motion.
@@ -176,15 +191,16 @@
         });
 
         // ── Timeline ──
-        // Paced so each phase gets room to be watched rather than glimpsed:
-        // tube warm-up to ~1s, self-test through ~3.1s, hand-off line to
-        // ~4.4s, wordmark from 4.65s with ~400ms of hold at the end, then the
-        // power-off collapse. Roughly 8.3s door to door, skippable throughout.
-        var LINE_STEP  = 215;   // gap between self-test lines
-        var LINE_START = 1050;
-        var STAMP_LAG  = 300;   // OK/SKIP lands after the line settles
+        // Slow on purpose. Every phase overlaps the next rather than cutting
+        // to it: the haze focuses to ~2.1s, the self-test drifts in through
+        // ~4s, the hand-off line glows up at 3.6s, and the wordmark starts
+        // surfacing at 4.6s while the self-test is still going soft. About
+        // 9.5s door to door, skippable throughout.
+        var LINE_STEP  = 250;   // gap between self-test lines
+        var LINE_START = 1000;
+        var STAMP_LAG  = 500;   // OK/SKIP settles well after the line does
 
-        at(700, function () { bootEl.classList.add('phase-post'); });
+        at(620, function () { bootEl.classList.add('phase-post'); });
 
         POST.forEach(function (row, i) {
             var t = LINE_START + i * LINE_STEP;
@@ -196,12 +212,12 @@
             }
         });
 
-        // Memory check counter — ticks up to 512K, then stamps OK. Runs long
-        // enough to read as a real count rather than a blur.
+        // Memory check counter — ticks up to 512K, then stamps OK. Unhurried:
+        // a number being remembered, not a benchmark running.
         if (memLine > -1) {
-            at(LINE_START + memLine * LINE_STEP + 130, function () {
+            at(LINE_START + memLine * LINE_STEP + 320, function () {
                 var value = 0;
-                every(13, function (id) {
+                every(16, function (id) {
                     value = Math.min(MEM_TOTAL, value + 4);
                     memEl.textContent = pad(value, 6) + 'K';
                     if (value >= MEM_TOTAL) {
@@ -212,23 +228,23 @@
             });
         }
 
-        // Typed hand-off line under the self-test.
+        // Hand-off line under the self-test. Written in one go and glowed up
+        // by CSS — the old character-by-character typing was the sharpest
+        // thing on the screen, and this sequence isn't in a hurry.
         var LOAD_TEXT = '> LOADING sil.via ♡ v2.0';
-        at(3300, function () {
-            var i = 0;
-            every(52, function (id) {
-                i++;
-                loadEl.textContent = LOAD_TEXT.slice(0, i);
-                if (i >= LOAD_TEXT.length) clearInterval(id);
-            });
+        at(3600, function () {
+            loadEl.textContent = LOAD_TEXT;
+            loadEl.classList.add('on');
         });
 
-        // Wordmark takes the screen. Its own animations run ~2.4s from here.
-        at(4650, function () { bootEl.classList.add('phase-logo'); });
+        // Wordmark starts surfacing while the self-test is still blurring
+        // away — the two overlap for well over a second. Its own animations
+        // run ~3.2s from here.
+        at(4600, function () { bootEl.classList.add('phase-logo'); });
 
-        // Power off into the site, after a beat of the finished logo just
+        // Dissolve into the site, after a beat of the finished wordmark just
         // sitting there — that pause is the console-logo moment.
-        at(7450, function () { reveal(false); });
+        at(8300, function () { reveal(false); });
     }
 
     // ── Entry points ──
