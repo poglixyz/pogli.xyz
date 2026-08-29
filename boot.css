@@ -344,6 +344,7 @@ html.pxyz-rewind .logo-stamp {
     flex-shrink: 0;
     width: 42px;
     text-align: right;
+    font-weight: 400;
     letter-spacing: 0.2em;
     opacity: 0;
     transition: opacity 0.9s ease;
@@ -610,8 +611,11 @@ html.pxyz-rewind .logo-stamp {
     opacity: 0;
 }
 
-.boot.phase-logo .boot-jp      { animation: post-fade 1.5s cubic-bezier(0.2, 0.7, 0.25, 1) 1.85s both; }
-.boot.phase-logo .boot-licence { animation: post-fade 1.5s cubic-bezier(0.2, 0.7, 0.25, 1) 2.15s both; }
+/* These two land last, and the timeline in boot.js waits on them: the
+   licence strip finishes ~3.15s into the logo phase, and the hand-off is
+   held back past that so the finished wordmark gets a beat of stillness. */
+.boot.phase-logo .boot-jp      { animation: post-fade 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) 1.6s  both; }
+.boot.phase-logo .boot-licence { animation: post-fade 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) 1.85s both; }
 
 /* ── Skip hint ──
    Breathes rather than blinks: it should never pull the eye off the middle

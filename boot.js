@@ -239,12 +239,13 @@
 
         // Wordmark starts surfacing while the self-test is still blurring
         // away — the two overlap for well over a second. Its own animations
-        // run ~3.2s from here.
+        // run ~3.15s from here, the licence strip landing last.
         at(4600, function () { bootEl.classList.add('phase-logo'); });
 
-        // Dissolve into the site, after a beat of the finished wordmark just
-        // sitting there — that pause is the console-logo moment.
-        at(8300, function () { reveal(false); });
+        // Dissolve into the site, ~700ms after the last line of the wordmark
+        // settles. That pause is the console-logo moment, and it's the reason
+        // the hand-off isn't simply chained off the logo phase.
+        at(8450, function () { reveal(false); });
     }
 
     // ── Entry points ──
