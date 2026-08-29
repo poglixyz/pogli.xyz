@@ -487,12 +487,15 @@ html.pxyz-rewind .logo-stamp {
 .boot-logo-text {
     position: relative;
     display: flex;
-    font-size: clamp(28px, 8.8vw, 62px);
-    font-weight: 300;
-    letter-spacing: 0.2em;
+    /* Audiowide is single-weight (400) and runs wide, so it takes less
+       tracking than the old mono wordmark did */
+    font-family: 'Audiowide', 'JetBrains Mono', monospace;
+    font-size: clamp(26px, 8vw, 56px);
+    font-weight: 400;
+    letter-spacing: 0.12em;
     /* the tracking leaves a gap after the last glyph; pull it back so the
        wordmark still sits optically centred under the halo */
-    margin-right: -0.2em;
+    margin-right: -0.12em;
     line-height: 1;
     white-space: nowrap;
 }

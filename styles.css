@@ -499,11 +499,9 @@ body::after {
 .sys-title-wrap { flex: 1; }
 
 .sys-title {
-    /* Audiowide ships a single 400 weight; bolding it just fake-bolds */
-    font-family: 'Audiowide', 'JetBrains Mono', monospace;
     font-size: 22px;
-    font-weight: 400;
-    letter-spacing: 0.03em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
     line-height: 1;
     color: var(--c-text);
 }
