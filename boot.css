@@ -1,10 +1,10 @@
 /* ══════════════════════════════════════════════════════════════
-   PXYZ BOOT SEQUENCE
-   A console remembered rather than switched on: dusk haze warms up →
-   the machine quietly recounts itself → the wordmark surfaces out of
-   soft focus → the whole thing dissolves into the page like waking.
-   Nothing here snaps, glitches or strobes; every transition is a long
-   cross-fade.
+   PXYZ BOOT SEQUENCE — take 2: the PS2 void as a soft memory
+   Deep purple space instead of Sony's grey-blue. The dark comes into
+   focus, a quiet sil.via ♡ pre-title holds for a beat, towers of light
+   drift up out of the deep — memory card data, remembered — and the
+   wordmark surfaces into all that space. Nothing snaps, glitches or
+   strobes; every transition is a long cross-fade.
 
    Loaded by index.html only. Every rule is inert until boot.js adds
    .pxyz-boot to <html> — which only happens via the footer PRESS
@@ -43,40 +43,37 @@ html.pxyz-rewind .logo-stamp {
 }
 
 /* ── Palette ──
-   Still the site's own pink and blue, but remembered through amber light:
-   each one is mixed toward a warm tone so nothing on screen reads as neon
-   or cyan. Declared on :root rather than on .boot deliberately —
-   body.dark-mode re-points --c-pink at a muted rose (#e0a8c0), and the
-   boot screen should be the same warm dusk whatever theme you're in.
-   Resolving the vars up on <html> takes the canonical values every time.
+   The site's own pink and blue, cooled into deep space rather than warmed
+   into dusk — the PS2 void, but in brand colours. Declared on :root rather
+   than on .boot deliberately — body.dark-mode re-points --c-pink at a muted
+   rose, and the boot screen should be the same void whatever theme you're
+   in. Resolving the vars up on <html> takes the canonical values every time.
 
-   The steps below are alpha ramps of those same mixes, so every tint in
-   the haze is the real colour rather than a hand-mixed near-miss. */
+   The steps below are alpha ramps of those same tokens, so every tint in
+   the dark is the real colour rather than a hand-mixed near-miss. */
 :root {
-    --boot-rose:  color-mix(in srgb, var(--c-pink) 66%, #ffab72);
-    --boot-mist:  color-mix(in srgb, var(--c-blue) 60%, #ffd2ae);
-    --boot-amber: color-mix(in srgb, var(--c-pink) 26%, #ffbe86);
-    --boot-cream: #fff2e6;
-    --boot-dusk:  #1d1522;
+    --ps2-pink:  var(--c-pink);
+    --ps2-blue:  var(--c-blue);
+    --ps2-lilac: color-mix(in srgb, var(--c-pink) 52%, var(--c-blue));
+    --ps2-white: #f7f3ff;
+    --ps2-void:  #0e0818;
 
-    /* status tints: dusty sage / warm sand, not signal green and orange */
-    --boot-ok:   #bcd9c0;
-    --boot-warn: #efcda2;
+    --ps2-pink-70: color-mix(in srgb, var(--ps2-pink) 70%, transparent);
+    --ps2-pink-45: color-mix(in srgb, var(--ps2-pink) 45%, transparent);
+    --ps2-pink-28: color-mix(in srgb, var(--ps2-pink) 28%, transparent);
+    --ps2-pink-14: color-mix(in srgb, var(--ps2-pink) 14%, transparent);
 
-    --boot-rose-70: color-mix(in srgb, var(--boot-rose) 70%, transparent);
-    --boot-rose-45: color-mix(in srgb, var(--boot-rose) 45%, transparent);
-    --boot-rose-28: color-mix(in srgb, var(--boot-rose) 28%, transparent);
-    --boot-rose-16: color-mix(in srgb, var(--boot-rose) 16%, transparent);
+    --ps2-blue-60: color-mix(in srgb, var(--ps2-blue) 60%, transparent);
+    --ps2-blue-40: color-mix(in srgb, var(--ps2-blue) 40%, transparent);
+    --ps2-blue-22: color-mix(in srgb, var(--ps2-blue) 22%, transparent);
+    --ps2-blue-12: color-mix(in srgb, var(--ps2-blue) 12%, transparent);
 
-    --boot-mist-40: color-mix(in srgb, var(--boot-mist) 40%, transparent);
-    --boot-mist-20: color-mix(in srgb, var(--boot-mist) 20%, transparent);
+    --ps2-lilac-35: color-mix(in srgb, var(--ps2-lilac) 35%, transparent);
+    --ps2-lilac-18: color-mix(in srgb, var(--ps2-lilac) 18%, transparent);
 
-    --boot-amber-35: color-mix(in srgb, var(--boot-amber) 35%, transparent);
-    --boot-amber-18: color-mix(in srgb, var(--boot-amber) 18%, transparent);
-
-    --boot-cream-88: color-mix(in srgb, var(--boot-cream) 88%, transparent);
-    --boot-cream-55: color-mix(in srgb, var(--boot-cream) 55%, transparent);
-    --boot-cream-30: color-mix(in srgb, var(--boot-cream) 30%, transparent);
+    --ps2-white-90: color-mix(in srgb, var(--ps2-white) 90%, transparent);
+    --ps2-white-55: color-mix(in srgb, var(--ps2-white) 55%, transparent);
+    --ps2-white-30: color-mix(in srgb, var(--ps2-white) 30%, transparent);
 }
 
 /* ── Overlay shell ── */
@@ -86,336 +83,243 @@ html.pxyz-rewind .logo-stamp {
     inset: 0;
     z-index: 9000;
     overflow: hidden;
-    background: #150e1c;
+    background: #0a0512;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
     font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 
-/* ── The veil ──
-   Warm dusk field the whole sequence lives inside. Comes up out of soft
-   focus once, then holds perfectly steady — no hum, no flicker, nothing
-   asking for attention. Square to match the console frame it hands off to. */
-.boot-veil {
+/* ── The void ──
+   Deep purple space the whole sequence lives inside. Comes into focus once,
+   then holds perfectly still — vast and calm, nothing asking for attention. */
+.boot-void {
     position: absolute;
     inset: 0;
     overflow: hidden;
     background:
-        radial-gradient(ellipse 96% 74% at 50% 40%, var(--boot-rose-16) 0%, transparent 70%),
-        radial-gradient(ellipse 70% 54% at 50% 52%, var(--boot-amber-18) 0%, transparent 74%),
-        radial-gradient(ellipse 130% 62% at 50% 110%, rgba(104, 58, 78, 0.5) 0%, transparent 72%),
-        linear-gradient(178deg, #140d1b 0%, var(--boot-dusk) 58%, #2b1b25 100%);
-    transform-origin: 50% 50%;
-    animation: boot-wake 2.1s cubic-bezier(0.32, 0, 0.16, 1) both;
+        radial-gradient(ellipse 84% 62% at 30% 28%, var(--ps2-pink-14) 0%, transparent 70%),
+        radial-gradient(ellipse 72% 56% at 72% 70%, var(--ps2-blue-12) 0%, transparent 72%),
+        radial-gradient(ellipse 130% 78% at 50% 118%, rgba(62, 38, 92, 0.5) 0%, transparent 70%),
+        linear-gradient(176deg, #090411 0%, var(--ps2-void) 55%, #191030 100%);
+    animation: void-wake 2.2s cubic-bezier(0.32, 0, 0.16, 1) both;
 }
 
-/* the memory coming into focus — never a power-on snap */
-@keyframes boot-wake {
-    0%   { opacity: 0; transform: scale(1.05); filter: blur(22px) brightness(0.4)  saturate(0.55); }
-    45%  { opacity: 1;                                                                            }
-    100% { opacity: 1; transform: scale(1);    filter: blur(0)    brightness(1)    saturate(1);    }
+/* the dark coming into focus — never a power-on snap */
+@keyframes void-wake {
+    0%   { opacity: 0; filter: blur(20px) brightness(0.4) saturate(0.6); }
+    45%  { opacity: 1;                                                   }
+    100% { opacity: 1; filter: blur(0)    brightness(1)   saturate(1);   }
 }
 
-/* ── Colour wash ──
+/* ── Nebula ──
    Two big out-of-focus blooms drifting past each other, slow enough that
-   you read it as light moving rather than as an animation. */
-.boot-wash {
+   you read it as space breathing rather than as an animation. */
+.boot-nebula {
     position: absolute;
     inset: -18%;
     z-index: 1;
     pointer-events: none;
     mix-blend-mode: screen;
-    opacity: 0.75;
+    opacity: 0.7;
     background:
-        radial-gradient(ellipse 42% 34% at 32% 38%, var(--boot-rose-28) 0%, transparent 70%),
-        radial-gradient(ellipse 38% 30% at 70% 62%, var(--boot-mist-20) 0%, transparent 72%);
-    filter: blur(46px);
-    animation: boot-wash-drift 26s ease-in-out infinite;
+        radial-gradient(ellipse 40% 32% at 30% 34%, var(--ps2-pink-28) 0%, transparent 70%),
+        radial-gradient(ellipse 38% 30% at 72% 64%, var(--ps2-blue-22) 0%, transparent 72%);
+    filter: blur(52px);
+    animation: nebula-drift 28s ease-in-out infinite;
 }
 
-@keyframes boot-wash-drift {
-    0%, 100% { transform: translate3d(0, 0, 0)          scale(1);    opacity: 0.62; }
-    50%      { transform: translate3d(2.5%, -3%, 0)     scale(1.09); opacity: 0.9;  }
+@keyframes nebula-drift {
+    0%, 100% { transform: translate3d(0, 0, 0)      scale(1);    opacity: 0.55; }
+    50%      { transform: translate3d(-2.5%, 2%, 0) scale(1.08); opacity: 0.85; }
 }
 
-/* ── Dust ──
-   Sparse soft motes rising very slowly. Three tile sizes so the grid never
-   reads as a grid. */
-.boot-motes {
+/* ── Stardust ──
+   Sparse soft motes drifting very slowly upward. Three tile sizes so the
+   grid never reads as a grid. */
+.boot-drift {
     position: absolute;
     inset: -12% 0;
     z-index: 2;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.45;
     background-image:
-        radial-gradient(circle at 22% 34%, var(--boot-cream-55) 0, transparent 1.6px),
-        radial-gradient(circle at 68% 12%, var(--boot-rose-45)  0, transparent 1.4px),
-        radial-gradient(circle at 45% 76%, var(--boot-cream-30) 0, transparent 1.9px);
+        radial-gradient(circle at 22% 34%, var(--ps2-white-55) 0, transparent 1.5px),
+        radial-gradient(circle at 68% 12%, var(--ps2-pink-45)  0, transparent 1.4px),
+        radial-gradient(circle at 45% 76%, var(--ps2-blue-40)  0, transparent 1.8px);
     background-size: 173px 173px, 241px 241px, 317px 317px;
     filter: blur(0.6px);
-    animation: boot-motes-rise 34s linear infinite;
+    animation: drift-rise 38s linear infinite;
 }
 
-@keyframes boot-motes-rise {
-    from { transform: translate3d(0, 0, 0);       }
-    to   { transform: translate3d(0, -317px, 0);  }
+@keyframes drift-rise {
+    from { transform: translate3d(0, 0, 0);      }
+    to   { transform: translate3d(0, -317px, 0); }
 }
 
-/* ── Haze ──
-   Warm bloom sitting over the picture, breathing very slowly. Screen blend
-   so it lifts the lit areas instead of fogging the dark. */
-.boot-haze {
+/* ── The towers ──
+   The PS2's rising memory towers, remembered as soft shafts of light
+   drifting up out of the deep. Each pillar sets its own geometry and pace
+   through custom properties; the one shared keyframe just carries them
+   upward and lets them go. They arrive with .phase-rise and keep drifting
+   under the wordmark for the rest of the sequence. */
+.boot-towers {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 3;
     pointer-events: none;
-    mix-blend-mode: screen;
-    background:
-        radial-gradient(ellipse 74% 56% at 50% 46%, var(--boot-rose-16) 0%, transparent 74%),
-        radial-gradient(ellipse 44% 32% at 50% 48%, var(--boot-amber-18) 0%, transparent 80%);
-    animation: boot-breathe 11s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity 2s ease;
 }
 
-@keyframes boot-breathe {
-    0%, 100% { opacity: 0.7; }
-    50%      { opacity: 1;   }
-}
+.boot.phase-rise .boot-towers { opacity: 1; }
 
-/* ── Grain ──
-   Fine film grain, generated inline (no asset) and translated on a long
-   loop rather than reshuffled per frame — the point is a soft-focus
-   texture, not static. Soft-light keeps it off the blacks. */
-.boot-grain {
+.boot-towers i {
     position: absolute;
-    inset: -160px;
-    z-index: 6;
-    pointer-events: none;
-    opacity: 0.3;
-    mix-blend-mode: soft-light;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.55'/%3E%3C/svg%3E");
-    background-size: 160px 160px;
-    animation: boot-grain-drift 19s linear infinite;
+    bottom: -14%;
+    left: var(--tw-l);
+    width: var(--tw-w);
+    height: var(--tw-h);
+    border-radius: 999px;
+    opacity: 0;
+    background: linear-gradient(
+        to top,
+        transparent 0%,
+        color-mix(in srgb, var(--tw-c) 30%, transparent) 22%,
+        color-mix(in srgb, var(--tw-c) 72%, transparent) 55%,
+        color-mix(in srgb, var(--tw-c) 30%, transparent) 82%,
+        transparent 100%
+    );
+    filter: blur(5px);
 }
 
-@keyframes boot-grain-drift {
-    from { transform: translate3d(0, 0, 0);          }
-    to   { transform: translate3d(-160px, -160px, 0); }
+.boot.phase-rise .boot-towers i {
+    animation: tower-rise var(--tw-dur) linear var(--tw-del) infinite;
 }
 
-/* ── Vignette ──
-   Wide and soft: the edges of the memory going, not a lens effect. */
-.boot-vignette {
+/* born in the dark below, brightest mid-climb, gone before the top */
+@keyframes tower-rise {
+    0%   { transform: translateY(34vh);  opacity: 0;    }
+    22%  {                               opacity: 0.75; }
+    70%  {                               opacity: 0.45; }
+    100% { transform: translateY(-58vh); opacity: 0;    }
+}
+
+.boot-towers i:nth-child(1) { --tw-l: 8%;  --tw-w: 3px; --tw-h: 46vh; --tw-c: var(--ps2-pink);  --tw-dur: 8.5s;  --tw-del: 0s;    }
+.boot-towers i:nth-child(2) { --tw-l: 16%; --tw-w: 2px; --tw-h: 62vh; --tw-c: var(--ps2-blue);  --tw-dur: 10s;   --tw-del: 1.4s;  }
+.boot-towers i:nth-child(3) { --tw-l: 27%; --tw-w: 4px; --tw-h: 38vh; --tw-c: var(--ps2-lilac); --tw-dur: 9s;    --tw-del: 0.6s;  }
+.boot-towers i:nth-child(4) { --tw-l: 38%; --tw-w: 2px; --tw-h: 54vh; --tw-c: var(--ps2-pink);  --tw-dur: 11s;   --tw-del: 2.2s;  }
+.boot-towers i:nth-child(5) { --tw-l: 55%; --tw-w: 3px; --tw-h: 44vh; --tw-c: var(--ps2-blue);  --tw-dur: 8s;    --tw-del: 0.3s;  }
+.boot-towers i:nth-child(6) { --tw-l: 66%; --tw-w: 2px; --tw-h: 60vh; --tw-c: var(--ps2-pink);  --tw-dur: 10.5s; --tw-del: 1.8s;  }
+.boot-towers i:nth-child(7) { --tw-l: 76%; --tw-w: 4px; --tw-h: 40vh; --tw-c: var(--ps2-lilac); --tw-dur: 9.5s;  --tw-del: 1s;    }
+.boot-towers i:nth-child(8) { --tw-l: 87%; --tw-w: 2px; --tw-h: 56vh; --tw-c: var(--ps2-blue);  --tw-dur: 8.8s;  --tw-del: 2.6s;  }
+.boot-towers i:nth-child(9) { --tw-l: 47%; --tw-w: 2px; --tw-h: 70vh; --tw-c: var(--ps2-white); --tw-dur: 12s;   --tw-del: 3.2s;  }
+
+/* ── The orbs ──
+   Smaller luminous forms adrift the whole time, not just once the towers
+   are up — the void was never quite empty. Same custom-property scheme;
+   each one sways sideways by its own --ob-dx on the way up. */
+.boot-orbs {
     position: absolute;
     inset: 0;
-    z-index: 7;
+    z-index: 3;
     pointer-events: none;
-    background:
-        radial-gradient(ellipse 88% 78% at 50% 48%, transparent 42%, rgba(16, 9, 20, 0.72) 100%),
-        radial-gradient(ellipse 130% 108% at 50% 50%, transparent 60%, rgba(10, 5, 14, 0.55) 100%);
-    box-shadow: inset 0 0 190px 60px rgba(14, 8, 18, 0.42);
 }
+
+.boot-orbs i {
+    position: absolute;
+    bottom: -6%;
+    left: var(--ob-l);
+    width: var(--ob-s);
+    height: var(--ob-s);
+    border-radius: 50%;
+    opacity: 0;
+    background: radial-gradient(circle at 42% 38%, var(--ps2-white-90) 0%, var(--ob-c) 45%, transparent 72%);
+    filter: blur(3px);
+    animation: orb-float var(--ob-dur) linear var(--ob-del) infinite;
+}
+
+@keyframes orb-float {
+    0%   { transform: translate3d(0, 12vh, 0);              opacity: 0;    }
+    18%  {                                                  opacity: 0.8;  }
+    75%  {                                                  opacity: 0.45; }
+    100% { transform: translate3d(var(--ob-dx), -78vh, 0);  opacity: 0;    }
+}
+
+.boot-orbs i:nth-child(1) { --ob-l: 12%; --ob-s: 10px; --ob-c: var(--ps2-pink-70); --ob-dur: 11s;   --ob-del: 0.5s; --ob-dx: 3vw;  }
+.boot-orbs i:nth-child(2) { --ob-l: 30%; --ob-s: 6px;  --ob-c: var(--ps2-blue-60); --ob-dur: 13s;   --ob-del: 2s;   --ob-dx: -2vw; }
+.boot-orbs i:nth-child(3) { --ob-l: 50%; --ob-s: 14px; --ob-c: var(--ps2-lilac-35);--ob-dur: 12s;   --ob-del: 1s;   --ob-dx: 2vw;  }
+.boot-orbs i:nth-child(4) { --ob-l: 64%; --ob-s: 8px;  --ob-c: var(--ps2-pink-70); --ob-dur: 10s;   --ob-del: 3s;   --ob-dx: -3vw; }
+.boot-orbs i:nth-child(5) { --ob-l: 80%; --ob-s: 12px; --ob-c: var(--ps2-blue-60); --ob-dur: 14s;   --ob-del: 0.2s; --ob-dx: 2vw;  }
+.boot-orbs i:nth-child(6) { --ob-l: 22%; --ob-s: 7px;  --ob-c: var(--ps2-lilac-35);--ob-dur: 12.5s; --ob-del: 4s;   --ob-dx: 1vw;  }
 
 /* ── Stage ── */
 
-/* POST block and wordmark share one centred grid cell, so the phase swap
+/* Pre-title and wordmark share one centred grid cell, so the phase swap
    never shifts layout and nothing needs a centring transform (which the
    exit/entry keyframes would otherwise have to carry). */
 .boot-stage {
     position: absolute;
     inset: 0;
-    z-index: 4;
+    z-index: 5;
     display: grid;
     place-items: center;
     padding: 8vh 6vw;
 }
 
-/* ── The self-test ──
-   Same readout, read back gently. Every line arrives out of focus and
-   settles; nothing types, nothing blinks. */
+/* ── The pre-title ──
+   The SCE screen, remembered: a small quiet name alone in the dark,
+   held just long enough to register, then let go upward as the towers
+   start to rise. */
 
-.boot-post {
+.boot-sce {
     grid-area: 1 / 1;
-    width: min(600px, 88vw);
-    opacity: 0;
-    text-transform: uppercase;
-}
-
-.boot.phase-post .boot-post { opacity: 1; }
-
-.post-head {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    font-size: clamp(10px, 2.4vw, 13px);
-    font-weight: 300;
-    letter-spacing: 0.3em;
-    color: var(--boot-cream-88);
-    text-shadow: 0 0 18px var(--boot-rose-45), 0 0 44px var(--boot-amber-18);
-    opacity: 0;
-    animation: post-fade 1.4s cubic-bezier(0.2, 0.7, 0.25, 1) both;
-}
-
-/* The sil.via ♡ wordmark keeps its lowercase styling inside the all-caps POST. */
-.post-brand,
-.post-rev,
-.post-load {
-    text-transform: none;
-}
-
-.post-rev {
-    font-size: 8px;
-    font-weight: 300;
-    letter-spacing: 0.2em;
-    color: var(--boot-mist);
-    border: 1px solid var(--boot-mist-20);
-    padding: 1px 5px;
-}
-
-.post-copy {
-    font-size: clamp(7px, 1.6vw, 8px);
-    letter-spacing: 0.18em;
-    color: var(--boot-rose-45);
-    margin: 8px 0 20px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--boot-rose-16);
-    opacity: 0;
-    animation: post-fade 1.4s cubic-bezier(0.2, 0.7, 0.25, 1) 0.35s both;
-}
-
-/* the one entrance shape everything soft reuses: drift up out of focus */
-@keyframes post-fade {
-    from { opacity: 0; transform: translateY(5px); filter: blur(7px); }
-    to   { opacity: 1; transform: translateY(0);   filter: blur(0);   }
-}
-
-.post-lines {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.post-line {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: clamp(8px, 1.9vw, 10px);
-    font-weight: 300;
-    letter-spacing: 0.16em;
-    color: var(--boot-cream-88);
-    text-shadow: 0 0 16px var(--boot-rose-28);
+    text-align: center;
     opacity: 0;
 }
 
-.post-line.on {
-    animation: post-line-in 1.25s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+.boot.phase-sce .boot-sce {
+    animation: sce-in 1.7s cubic-bezier(0.2, 0.7, 0.25, 1) both;
 }
 
-/* no brightness spike, no slide — it simply comes into focus where it is */
-@keyframes post-line-in {
-    0%   { opacity: 0;    transform: translateY(6px); filter: blur(8px); }
-    100% { opacity: 1;    transform: translateY(0);   filter: blur(0);   }
+@keyframes sce-in {
+    from { opacity: 0; transform: translateY(9px) scale(0.985); filter: blur(11px); }
+    to   { opacity: 1; transform: translateY(0)   scale(1);     filter: blur(0);    }
 }
 
-.pl-label { flex-shrink: 0; }
-
-.pl-dots {
-    flex: 1;
-    height: 1px;
-    min-width: 12px;
-    opacity: 0.4;
-    background: repeating-linear-gradient(
-        90deg,
-        var(--boot-rose-45) 0px,
-        var(--boot-rose-45) 2px,
-        transparent 2px,
-        transparent 8px
-    );
+/* Same specificity as the entry above; winning by being later in the file
+   is deliberate — once .phase-rise lands, the exit owns the element. */
+.boot.phase-rise .boot-sce {
+    animation: sce-out 1.5s cubic-bezier(0.4, 0, 0.3, 1) forwards;
 }
 
-.pl-value {
-    flex-shrink: 0;
-    color: var(--boot-mist);
-    text-shadow: 0 0 14px var(--boot-mist-20);
-    font-variant-numeric: tabular-nums;
+@keyframes sce-out {
+    from { opacity: 1; transform: translateY(0);     filter: blur(0);    }
+    to   { opacity: 0; transform: translateY(-16px); filter: blur(12px); }
 }
 
-.pl-stat {
-    flex-shrink: 0;
-    width: 42px;
-    text-align: right;
-    font-weight: 400;
-    letter-spacing: 0.2em;
-    opacity: 0;
-    transition: opacity 0.9s ease;
-}
-
-.pl-stat.on   { opacity: 1; }
-.pl-stat.ok   { color: var(--boot-ok);   text-shadow: 0 0 14px rgba(188, 217, 192, 0.4); }
-.pl-stat.skip { color: var(--boot-warn); text-shadow: 0 0 14px rgba(239, 205, 162, 0.4); }
-
-/* hand-off line — one soft glow fade, no caret and no typing */
-.post-load {
-    margin-top: 24px;
-    min-height: 1.2em;
-    font-size: clamp(8px, 1.9vw, 10px);
+.sce-name {
+    font-size: clamp(19px, 4.6vw, 29px);
     font-weight: 300;
     letter-spacing: 0.22em;
-    color: var(--boot-rose);
-    text-shadow: 0 0 16px var(--boot-rose-45), 0 0 40px var(--boot-amber-18);
-    opacity: 0;
+    color: var(--ps2-white);
+    text-shadow: 0 0 24px var(--ps2-pink-45), 0 0 64px var(--ps2-pink-28);
 }
 
-.post-load.on {
-    animation: post-load-in 1.6s cubic-bezier(0.2, 0.7, 0.25, 1) both;
-}
-
-@keyframes post-load-in {
-    0%   { opacity: 0;    transform: translateY(4px); filter: blur(10px); }
-    60%  { opacity: 1;                                                    }
-    100% { opacity: 0.92; transform: translateY(0);   filter: blur(0);    }
-}
-
-/* The self-test doesn't cut away — it goes out of focus over more than a
-   second while the wordmark is already surfacing underneath it. */
-.boot.phase-logo .boot-post {
-    animation: post-out 1.3s cubic-bezier(0.4, 0, 0.3, 1) forwards;
-}
-
-@keyframes post-out {
-    to { opacity: 0; transform: translateY(-10px); filter: blur(12px); }
-}
-
-/* ── Swell ──
-   The phase change, felt rather than seen: warm light rises through the
-   whole veil and settles again. Replaces the old hard colour swipe. */
-.boot-swell {
-    position: absolute;
-    inset: -20%;
-    z-index: 3;
-    opacity: 0;
-    pointer-events: none;
-    mix-blend-mode: screen;
-    filter: blur(64px);
-    background:
-        radial-gradient(ellipse 56% 42% at 50% 58%, var(--boot-amber-35) 0%, transparent 72%),
-        radial-gradient(ellipse 80% 56% at 50% 50%, var(--boot-rose-28)  0%, transparent 76%);
-}
-
-.boot.phase-logo .boot-swell {
-    animation: boot-swell 2.6s cubic-bezier(0.24, 0.6, 0.24, 1) both;
-}
-
-@keyframes boot-swell {
-    0%   { opacity: 0;    transform: translateY(9%) scale(0.9); }
-    38%  { opacity: 0.95; }
-    100% { opacity: 0;    transform: translateY(0)  scale(1.14); }
+.sce-sub {
+    margin-top: 14px;
+    font-size: clamp(7px, 1.6vw, 8px);
+    font-weight: 300;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--ps2-blue-60);
+    text-shadow: 0 0 16px var(--ps2-blue-22);
 }
 
 /* ══ The wordmark surfacing ══
-   Light weight, wide tracking, and every glyph arriving out of a heavy
-   blur — the name resolving out of a memory rather than a logo locking
-   on. No strike, no overshoot, no per-letter scatter. */
+   The console-logo moment: the name arrives out of heavy blur, a touch
+   too large, and drifts down to rest — that PS2 sense of a title with
+   vast calm space around it. No strike, no overshoot, no scatter. */
 
 .boot-logo {
     grid-area: 1 / 1;
@@ -428,168 +332,121 @@ html.pxyz-rewind .logo-stamp {
 
 .boot.phase-logo .boot-logo { opacity: 1; }
 
-/* The halo the name comes out of: swells wide and stays as a soft glow.
-   Kept short and sat high on purpose — it has to fall off above the JP line
-   and the licence strip, or it washes both of them out. */
+/* The halo the name comes out of: swells wide and settles as a soft glow.
+   Sat high on purpose — it has to fall off above the JP line and the
+   licence strip, or it washes both of them out. */
 .boot-halo {
     position: absolute;
     left: 50%;
-    top: 28%;
-    width: min(820px, 104vw);
-    height: 320px;
-    margin-left: calc(min(820px, 104vw) / -2);
-    margin-top: -160px;
+    top: 30%;
+    width: min(840px, 106vw);
+    height: 330px;
+    margin-left: calc(min(840px, 106vw) / -2);
+    margin-top: -165px;
     pointer-events: none;
     opacity: 0;
     mix-blend-mode: screen;
-    filter: blur(30px);
-    background: radial-gradient(ellipse 50% 42% at 50% 50%, var(--boot-amber-35) 0%, var(--boot-rose-16) 45%, transparent 74%);
+    filter: blur(32px);
+    background:
+        radial-gradient(ellipse 50% 40% at 50% 50%, var(--ps2-pink-28) 0%, transparent 72%),
+        radial-gradient(ellipse 74% 30% at 50% 54%, var(--ps2-blue-22) 0%, transparent 78%);
 }
 
 .boot.phase-logo .boot-halo {
-    animation: boot-halo 3s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+    animation: halo-swell 3.2s cubic-bezier(0.22, 0.7, 0.25, 1) both;
 }
 
-@keyframes boot-halo {
-    0%   { opacity: 0;    transform: scale(0.7);  }
-    55%  { opacity: 0.88; transform: scale(1.06); }
+@keyframes halo-swell {
+    0%   { opacity: 0;    transform: scale(0.72); }
+    55%  { opacity: 0.9;  transform: scale(1.05); }
     100% { opacity: 0.55; transform: scale(1);    }
 }
 
-/* closer, warmer bloom sitting right behind the letters */
-.boot-logo-glow {
-    position: absolute;
-    left: 50%;
-    top: 34%;
-    width: min(700px, 92vw);
-    height: 230px;
-    margin-left: calc(min(700px, 92vw) / -2);
-    margin-top: -115px;
-    pointer-events: none;
-    opacity: 0;
-    mix-blend-mode: screen;
-    filter: blur(14px);
-    background:
-        radial-gradient(ellipse 58% 40% at 50% 50%, var(--boot-rose-45) 0%, transparent 74%),
-        radial-gradient(ellipse 92% 22% at 50% 50%, var(--boot-mist-20) 0%, transparent 80%);
-}
-
-.boot.phase-logo .boot-logo-glow {
-    animation: boot-logo-bloom 2.8s cubic-bezier(0.22, 0.7, 0.25, 1) 0.2s both;
-}
-
-@keyframes boot-logo-bloom {
-    0%   { opacity: 0;    transform: scale(0.86, 0.7); }
-    52%  { opacity: 0.95; transform: scale(1.04, 1.04); }
-    100% { opacity: 0.55; transform: scale(1, 1);      }
-}
-
+/* the slow drift: the whole wordmark starts a touch too close and eases
+   back into place while the glyphs are still resolving */
 .boot-logo-text {
     position: relative;
     display: flex;
-    /* Audiowide is single-weight (400) and runs wide, so it takes less
-       tracking than the old mono wordmark did */
+    /* Audiowide is single-weight (400) and runs wide, so it takes modest
+       tracking; the negative margin pulls back the gap the tracking leaves
+       after the last glyph, keeping the name optically centred */
     font-family: 'Audiowide', 'JetBrains Mono', monospace;
     font-size: clamp(26px, 8vw, 56px);
     font-weight: 400;
     letter-spacing: 0.12em;
-    /* the tracking leaves a gap after the last glyph; pull it back so the
-       wordmark still sits optically centred under the halo */
     margin-right: -0.12em;
     line-height: 1;
     white-space: nowrap;
 }
 
+.boot.phase-logo .boot-logo-text {
+    animation: logo-drift 4.4s cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+@keyframes logo-drift {
+    from { transform: scale(1.09) translateY(7px); }
+    to   { transform: scale(1)    translateY(0);   }
+}
+
 .boot-char {
     display: inline-block;
-    color: var(--boot-cream);
+    color: var(--ps2-white);
     transform-origin: 50% 60%;
 }
 
-/* rose → cream → warm mist across the wordmark, one soft colour per glyph.
+/* pink → white → blue across the wordmark, one soft colour per glyph.
    (per-char background-clip:text would run a full gradient inside every
-   letter; solid steps read as one gradient and survive transforms.)
-   Mixed from the site tokens so both ends stay the real brand colours,
-   just warmed. */
-.boot-char:nth-child(1) { color: var(--boot-rose); }
-.boot-char:nth-child(2) { color: color-mix(in srgb, var(--boot-rose), var(--boot-cream) 30%); }
-.boot-char:nth-child(3) { color: color-mix(in srgb, var(--boot-rose), var(--boot-cream) 55%); }
-.boot-char:nth-child(4) { color: color-mix(in srgb, var(--boot-rose), var(--boot-cream) 78%); }
-.boot-char:nth-child(5) { color: var(--boot-cream); }
-.boot-char:nth-child(6) { color: color-mix(in srgb, var(--boot-mist), var(--boot-cream) 78%); }
-.boot-char:nth-child(7) { color: color-mix(in srgb, var(--boot-mist), var(--boot-cream) 55%); }
-.boot-char:nth-child(8) { color: color-mix(in srgb, var(--boot-mist), var(--boot-cream) 30%); }
-.boot-char:nth-child(9) { color: var(--boot-mist); }
+   letter; solid steps read as one gradient and survive transforms.) */
+.boot-char:nth-child(1) { color: var(--ps2-pink); }
+.boot-char:nth-child(2) { color: color-mix(in srgb, var(--ps2-pink), var(--ps2-white) 32%); }
+.boot-char:nth-child(3) { color: color-mix(in srgb, var(--ps2-pink), var(--ps2-white) 58%); }
+.boot-char:nth-child(4) { color: color-mix(in srgb, var(--ps2-pink), var(--ps2-white) 80%); }
+.boot-char:nth-child(5) { color: var(--ps2-white); }
+.boot-char:nth-child(6) { color: color-mix(in srgb, var(--ps2-blue), var(--ps2-white) 80%); }
+.boot-char:nth-child(7) { color: color-mix(in srgb, var(--ps2-blue), var(--ps2-white) 58%); }
+.boot-char:nth-child(8) { color: color-mix(in srgb, var(--ps2-blue), var(--ps2-white) 32%); }
+.boot-char:nth-child(9) { color: var(--ps2-blue); }
 
-.boot-char:nth-child(-n+5) { text-shadow: 0 0 22px var(--boot-rose-70), 0 0 62px var(--boot-amber-35); }
-.boot-char:nth-child(n+6)  { text-shadow: 0 0 22px var(--boot-mist-40), 0 0 62px var(--boot-rose-28); }
+.boot-char:nth-child(-n+5) { text-shadow: 0 0 22px var(--ps2-pink-70), 0 0 62px var(--ps2-pink-28); }
+.boot-char:nth-child(n+6)  { text-shadow: 0 0 22px var(--ps2-blue-40), 0 0 62px var(--ps2-blue-22); }
 
 .boot.phase-logo .boot-char {
-    animation: boot-char-dream 1.7s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+    animation: char-surface 1.9s cubic-bezier(0.2, 0.7, 0.25, 1) both;
 }
 
-/* out of focus, slightly too large, drifting down into place */
-@keyframes boot-char-dream {
-    0%   { opacity: 0; transform: translateY(-9px) scale(1.07); filter: blur(15px); }
-    55%  { opacity: 1;                                                              }
-    100% { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0);    }
+/* out of focus, slightly adrift, settling into place */
+@keyframes char-surface {
+    0%   { opacity: 0; transform: translateY(-10px) scale(1.06); filter: blur(16px); }
+    55%  { opacity: 1;                                                               }
+    100% { opacity: 1; transform: translateY(0)     scale(1);    filter: blur(0);    }
 }
 
 /* Stagger. Must out-specify the `animation` shorthand above (which resets
    delay to 0), hence the .boot.phase-logo prefix rather than a bare
    .boot-char:nth-child(). */
-.boot.phase-logo .boot-char:nth-child(1) { animation-delay: 0.10s; }
-.boot.phase-logo .boot-char:nth-child(2) { animation-delay: 0.21s; }
-.boot.phase-logo .boot-char:nth-child(3) { animation-delay: 0.32s; }
-.boot.phase-logo .boot-char:nth-child(4) { animation-delay: 0.43s; }
-.boot.phase-logo .boot-char:nth-child(5) { animation-delay: 0.54s; }
-.boot.phase-logo .boot-char:nth-child(6) { animation-delay: 0.65s; }
-.boot.phase-logo .boot-char:nth-child(7) { animation-delay: 0.76s; }
-.boot.phase-logo .boot-char:nth-child(8) { animation-delay: 0.87s; }
-.boot.phase-logo .boot-char:nth-child(9) { animation-delay: 0.98s; }
-
-/* the console gloss the site keeps everywhere, blurred out until it's a
-   slow warm shimmer drifting over the finished name */
-.boot-gloss {
-    position: absolute;
-    inset: -40% -60%;
-    pointer-events: none;
-    opacity: 0;
-    mix-blend-mode: screen;
-    filter: blur(22px);
-    background: linear-gradient(
-        100deg,
-        transparent 26%,
-        var(--boot-cream-30) 42%,
-        var(--boot-cream-55) 50%,
-        var(--boot-cream-30) 58%,
-        transparent 74%
-    );
-}
-
-.boot.phase-logo .boot-gloss {
-    animation: boot-gloss 2.4s cubic-bezier(0.4, 0, 0.3, 1) 1.5s both;
-}
-
-@keyframes boot-gloss {
-    0%   { opacity: 0;   transform: translateX(-62%); }
-    32%  { opacity: 0.9;                              }
-    100% { opacity: 0;   transform: translateX(62%);  }
-}
+.boot.phase-logo .boot-char:nth-child(1) { animation-delay: 0.08s; }
+.boot.phase-logo .boot-char:nth-child(2) { animation-delay: 0.18s; }
+.boot.phase-logo .boot-char:nth-child(3) { animation-delay: 0.28s; }
+.boot.phase-logo .boot-char:nth-child(4) { animation-delay: 0.38s; }
+.boot.phase-logo .boot-char:nth-child(5) { animation-delay: 0.48s; }
+.boot.phase-logo .boot-char:nth-child(6) { animation-delay: 0.58s; }
+.boot.phase-logo .boot-char:nth-child(7) { animation-delay: 0.68s; }
+.boot.phase-logo .boot-char:nth-child(8) { animation-delay: 0.78s; }
+.boot.phase-logo .boot-char:nth-child(9) { animation-delay: 0.88s; }
 
 .boot-bar {
     width: 0;
     height: 1px;
     margin-top: 22px;
-    background: linear-gradient(90deg, transparent, var(--boot-rose-70), var(--boot-cream-88), var(--boot-mist-40), transparent);
-    box-shadow: 0 0 18px var(--boot-rose-28);
+    background: linear-gradient(90deg, transparent, var(--ps2-pink-70), var(--ps2-white-90), var(--ps2-blue-60), transparent);
+    box-shadow: 0 0 18px var(--ps2-pink-28);
 }
 
 .boot.phase-logo .boot-bar {
-    animation: boot-bar 1.7s cubic-bezier(0.22, 0.7, 0.25, 1) 1.35s both;
+    animation: bar-draw 1.7s cubic-bezier(0.22, 0.7, 0.25, 1) 1.2s both;
 }
 
-@keyframes boot-bar {
+@keyframes bar-draw {
     from { width: 0;   opacity: 0; filter: blur(6px); }
     to   { width: 82%; opacity: 1; filter: blur(0);   }
 }
@@ -597,10 +454,10 @@ html.pxyz-rewind .logo-stamp {
 .boot-jp {
     font-family: 'DotGothic16', 'JetBrains Mono', monospace;
     font-size: clamp(9px, 2.2vw, 12px);
-    letter-spacing: 0.34em;
+    letter-spacing: 0.3em;
     margin-top: 18px;
-    color: var(--boot-cream-88);
-    text-shadow: 0 0 18px var(--boot-rose-45);
+    color: var(--ps2-white-90);
+    text-shadow: 0 0 18px var(--ps2-pink-45);
     opacity: 0;
 }
 
@@ -609,16 +466,55 @@ html.pxyz-rewind .logo-stamp {
     font-weight: 300;
     letter-spacing: 0.28em;
     margin-top: 12px;
-    color: var(--boot-cream-55);
+    color: var(--ps2-white-55);
     text-transform: uppercase;
     opacity: 0;
 }
 
+/* the shared soft entrance: drift up out of focus */
+@keyframes soft-in {
+    from { opacity: 0; transform: translateY(5px); filter: blur(7px); }
+    to   { opacity: 1; transform: translateY(0);   filter: blur(0);   }
+}
+
 /* These two land last, and the timeline in boot.js waits on them: the
-   licence strip finishes ~3.15s into the logo phase, and the hand-off is
+   licence strip finishes ~3.05s into the logo phase, and the hand-off is
    held back past that so the finished wordmark gets a beat of stillness. */
-.boot.phase-logo .boot-jp      { animation: post-fade 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) 1.6s  both; }
-.boot.phase-logo .boot-licence { animation: post-fade 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) 1.85s both; }
+.boot.phase-logo .boot-jp      { animation: soft-in 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) 1.5s  both; }
+.boot.phase-logo .boot-licence { animation: soft-in 1.3s cubic-bezier(0.2, 0.7, 0.25, 1) 1.75s both; }
+
+/* ── Haze ──
+   Cool bloom sitting over the picture, breathing very slowly. Screen blend
+   so it lifts the lit areas instead of fogging the dark. */
+.boot-haze {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background:
+        radial-gradient(ellipse 74% 56% at 50% 46%, var(--ps2-pink-14) 0%, transparent 74%),
+        radial-gradient(ellipse 46% 34% at 50% 52%, var(--ps2-blue-12) 0%, transparent 80%);
+    animation: haze-breathe 12s ease-in-out infinite;
+}
+
+@keyframes haze-breathe {
+    0%, 100% { opacity: 0.65; }
+    50%      { opacity: 1;    }
+}
+
+/* ── Vignette ──
+   Wide and soft: the edges of the memory going, not a lens effect. */
+.boot-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 88% 78% at 50% 48%, transparent 42%, rgba(9, 4, 17, 0.74) 100%),
+        radial-gradient(ellipse 130% 108% at 50% 50%, transparent 60%, rgba(6, 3, 12, 0.55) 100%);
+    box-shadow: inset 0 0 190px 60px rgba(8, 4, 15, 0.42);
+}
 
 /* ── Skip hint ──
    Breathes rather than blinks: it should never pull the eye off the middle
@@ -634,31 +530,31 @@ html.pxyz-rewind .logo-stamp {
     font-weight: 300;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--boot-rose-45);
+    color: var(--ps2-blue-40);
     opacity: 0;
-    animation: boot-skip-in 1.4s ease 2s both, boot-skip-breathe 5.5s ease-in-out 3.4s infinite;
+    animation: skip-in 1.4s ease 2s both, skip-breathe 5.5s ease-in-out 3.4s infinite;
 }
 
-@keyframes boot-skip-in {
+@keyframes skip-in {
     from { opacity: 0;    filter: blur(5px); }
     to   { opacity: 0.85; filter: blur(0);   }
 }
 
-@keyframes boot-skip-breathe {
+@keyframes skip-breathe {
     0%, 100% { opacity: 0.85; }
     50%      { opacity: 0.3;  }
 }
 
 /* ── Hand-off ──
-   Not a power-off. The warm light comes up through everything, the picture
-   goes soft, and the page is simply there underneath — waking rather than
-   switching over. */
+   Not a power-off. A soft lilac light lifts through everything, the void
+   goes gently out of focus, and the page is simply there underneath —
+   waking rather than switching over. */
 
 .boot-dawn {
     position: absolute;
     inset: 0;
     z-index: 10;
-    background: radial-gradient(ellipse 90% 74% at 50% 52%, var(--boot-cream) 0%, var(--boot-amber) 55%, transparent 100%);
+    background: radial-gradient(ellipse 90% 74% at 50% 52%, var(--ps2-white) 0%, var(--ps2-lilac) 55%, transparent 100%);
     opacity: 0;
     pointer-events: none;
 }
@@ -668,9 +564,9 @@ html.pxyz-rewind .logo-stamp {
     animation: boot-dissolve 1.15s cubic-bezier(0.36, 0, 0.24, 1) forwards;
 }
 
-#bootscreen.boot-out .boot-veil { animation: boot-veil-out 1.15s cubic-bezier(0.36, 0, 0.24, 1) forwards; }
-#bootscreen.boot-out .boot-skip { animation: boot-skip-out 0.4s ease forwards; }
-#bootscreen.boot-out .boot-dawn { animation: boot-dawn-up  1.15s ease-out forwards; }
+#bootscreen.boot-out .boot-void { animation: void-out  1.15s cubic-bezier(0.36, 0, 0.24, 1) forwards; }
+#bootscreen.boot-out .boot-skip { animation: skip-out  0.4s ease forwards; }
+#bootscreen.boot-out .boot-dawn { animation: dawn-up   1.15s ease-out forwards; }
 
 @keyframes boot-dissolve {
     0%   { opacity: 1;    filter: blur(0);    }
@@ -678,18 +574,18 @@ html.pxyz-rewind .logo-stamp {
     100% { opacity: 0;    filter: blur(16px); }
 }
 
-@keyframes boot-veil-out {
+@keyframes void-out {
     0%   { transform: scale(1);    }
     100% { transform: scale(1.06); }
 }
 
-@keyframes boot-dawn-up {
+@keyframes dawn-up {
     0%   { opacity: 0;    }
-    45%  { opacity: 0.45; }
+    45%  { opacity: 0.4;  }
     100% { opacity: 0;    }
 }
 
-@keyframes boot-skip-out {
+@keyframes skip-out {
     to { opacity: 0; }
 }
 
@@ -706,16 +602,14 @@ html.pxyz-rewind .logo-stamp {
 /* ── Reduced motion ──
    Wordmark, held still, then out. Everything that moves is dropped. */
 
-.boot.boot-reduced .boot-wash,
-.boot.boot-reduced .boot-motes,
-.boot.boot-reduced .boot-grain,
-.boot.boot-reduced .boot-swell,
+.boot.boot-reduced .boot-nebula,
+.boot.boot-reduced .boot-drift,
+.boot.boot-reduced .boot-towers,
+.boot.boot-reduced .boot-orbs,
 .boot.boot-reduced .boot-halo,
-.boot.boot-reduced .boot-gloss,
-.boot.boot-reduced .boot-logo-glow,
-.boot.boot-reduced .boot-post { display: none; }
+.boot.boot-reduced .boot-sce { display: none; }
 
-.boot.boot-reduced .boot-veil      { animation: none; }
+.boot.boot-reduced .boot-void      { animation: none; }
 .boot.boot-reduced .boot-haze      { animation: none; }
 .boot.boot-reduced .boot-logo      { opacity: 1; }
 .boot.boot-reduced .boot-logo-text { animation: none; }
@@ -729,25 +623,20 @@ html.pxyz-rewind .logo-stamp {
    moving parts still stay still. The exit fade on #bootscreen is left
    alone so the overlay can always get out of the way. */
 @media (prefers-reduced-motion: reduce) {
-    .boot .boot-veil,
-    .boot .boot-wash,
-    .boot .boot-motes,
-    .boot .boot-grain,
+    .boot .boot-void,
+    .boot .boot-nebula,
+    .boot .boot-drift,
+    .boot .boot-towers i,
+    .boot .boot-orbs i,
     .boot .boot-haze,
-    .boot .boot-swell,
     .boot .boot-halo,
-    .boot .boot-gloss,
-    .boot .boot-logo-glow,
+    .boot .boot-sce,
     .boot .boot-logo-text,
     .boot .boot-char,
     .boot .boot-bar,
     .boot .boot-jp,
     .boot .boot-licence,
-    .boot .boot-skip,
-    .boot .post-head,
-    .boot .post-copy,
-    .boot .post-line,
-    .boot .post-load {
+    .boot .boot-skip {
         animation: none !important;
     }
 }

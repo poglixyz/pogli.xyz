@@ -1,8 +1,10 @@
-// ── PXYZ boot sequence ──
-// Remembers the fantasy console rather than powering it on: the dusk haze
-// comes into focus, the self-test reads itself back, the wordmark surfaces,
-// and the whole thing dissolves into the page. Everything is paced for long
-// cross-fades — see boot.css for the matching easings.
+// ── PXYZ boot sequence — take 2: the PS2 void as a soft memory ──
+// No self-test this time. The dark comes into focus, a quiet sil.via ♡
+// pre-title holds for a beat (the SCE screen, remembered), towers of light
+// drift up out of the deep — memory card data, reinterpreted — and the
+// wordmark surfaces into all that space before the whole thing dissolves
+// into the page. Pacing and easings live in boot.css.
+//
 // The overlay markup lives in index.html but is display:none (see boot.css)
 // until this file flags <html class="pxyz-boot">, so no-JS visitors — and
 // everyone on a normal page load — just get the plain page.
@@ -18,28 +20,13 @@
     // No overlay markup at all — nothing to play and nothing to replay.
     if (!liveEl) return;
 
-    // Pristine copy, taken before the self-test writes into the readout, so
-    // every replay starts from exactly the markup the first boot got.
+    // Pristine copy taken up front, so every replay starts from exactly the
+    // markup the first run got.
     var template = liveEl.cloneNode(true);
 
     // One sequence at a time. Stays true through the teardown fade as well, so
     // a second press mid-exit can't stack two overlays on top of each other.
     var running = false;
-
-    // ── Self-test table ──
-    // value === null means the line owns a live counter instead of static text.
-    var POST = [
-        ['MAIN PROCESSOR',     'HEART-CORE 900MHZ', 'ok'],
-        ['MAIN MEMORY',        null,                'ok'],
-        ['VIDEO RAM',          '4096K NTSC-J',      'ok'],
-        ['DISC DRIVE',         'NO DISC',           'skip'],
-        ['CONTROLLER PORT 1',  'CONNECTED',         'ok'],
-        ['MEMORY CARD SLOT 1', '8 BLOCKS FREE',     'ok'],
-        ['CHAO GARDEN LINK',   'HERO / ONLINE',     'ok'],
-        ['NETWORK UPLINK',     'POGLI.XYZ',         'ok']
-    ];
-
-    var MEM_TOTAL = 512;
 
     // Hard backstop. If the timeline somehow never reaches its own hand-off —
     // a throttled background tab, a handler that threw part-way through — the
@@ -47,41 +34,26 @@
     // Set well past the end of the sequence so a normal run never trips it.
     var FAILSAFE_MS = 14000;
 
-    function pad(n, width) {
-        var s = String(n);
-        while (s.length < width) s = '0' + s;
-        return s;
-    }
-
     // ── One run of the sequence ──
     // Everything with a lifetime — timers, the skip binding, the done latch —
     // lives inside here, so a replay can never inherit the last run's state.
     // `bootEl` is the overlay copy this run owns and tears down when it ends.
     function run(bootEl) {
-        var reduced   = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-        var timers    = [];
-        var intervals = [];
-        var done      = false;
+        var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        var timers  = [];
+        var done    = false;
 
         function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
 
-        function every(ms, fn) {
-            var id = setInterval(function () { fn(id); }, ms);
-            intervals.push(id);
-            return id;
-        }
-
         function clearAll() {
             for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]);
-            for (var j = 0; j < intervals.length; j++) clearInterval(intervals[j]);
             timers = [];
-            intervals = [];
         }
 
         // ── Reveal / hand-off ──
         // `cut` = user skipped or reduced motion: quick soft fade.
-        // otherwise: the slow dissolve — warm light up, picture out of focus,
-        // page already sitting underneath.
+        // otherwise: the slow dissolve — the void softens and the page is
+        // simply there underneath.
         function reveal(cut) {
             if (done) return;
             done = true;
@@ -89,9 +61,8 @@
             unbindSkip();
 
             // Release the page's entrance animations at the same instant the
-            // overlay starts clearing. The console frame's own 0.3s delay then
-            // runs underneath the fade, so it's already materialising as the
-            // boot screen softens away and the menu stagger follows straight on.
+            // overlay starts clearing, so the console frame is materialising
+            // as the void softens away and the menu stagger follows on.
             root.classList.remove('pxyz-hold');
             bootEl.classList.add(cut ? 'boot-cut' : 'boot-out');
 
@@ -112,15 +83,15 @@
         }
 
         function bindSkip() {
-            document.addEventListener('keydown',   onSkip, true);
+            document.addEventListener('keydown',     onSkip, true);
             document.addEventListener('pointerdown', onSkip, true);
-            document.addEventListener('touchstart', onSkip, true);
+            document.addEventListener('touchstart',  onSkip, true);
         }
 
         function unbindSkip() {
-            document.removeEventListener('keydown',   onSkip, true);
+            document.removeEventListener('keydown',     onSkip, true);
             document.removeEventListener('pointerdown', onSkip, true);
-            document.removeEventListener('touchstart', onSkip, true);
+            document.removeEventListener('touchstart',  onSkip, true);
         }
 
         // Bound one tick late so the click or keypress that asked for a replay
@@ -143,109 +114,19 @@
             return;
         }
 
-        // ── Build the POST readout ──
-        // Scoped to this run's overlay rather than the document, so a replay
-        // can never write into a copy that's still fading out.
-        var linesEl = bootEl.querySelector('#boot-lines');
-        var loadEl  = bootEl.querySelector('#boot-load');
-
-        // Markup drifted out from under us — bail to the plain page rather than
-        // sitting on a half-built boot screen.
-        if (!linesEl || !loadEl) { reveal(true); return; }
-
-        var memEl   = null;
-        var memLine = -1;
-        var stats   = [];
-
-        POST.forEach(function (row, i) {
-            var line = document.createElement('div');
-            line.className = 'post-line';
-
-            var label = document.createElement('span');
-            label.className = 'pl-label';
-            label.textContent = row[0];
-
-            var dots = document.createElement('span');
-            dots.className = 'pl-dots';
-
-            var value = document.createElement('span');
-            value.className = 'pl-value';
-            if (row[1] === null) {
-                value.textContent = pad(0, 6) + 'K';
-                memEl   = value;
-                memLine = i;
-            } else {
-                value.textContent = row[1];
-            }
-
-            var stat = document.createElement('span');
-            stat.className = 'pl-stat ' + row[2];
-            stat.textContent = row[2] === 'skip' ? 'SKIP' : 'OK';
-
-            line.appendChild(label);
-            line.appendChild(dots);
-            line.appendChild(value);
-            line.appendChild(stat);
-            linesEl.appendChild(line);
-            stats.push(stat);
-        });
-
         // ── Timeline ──
-        // Slow on purpose. Every phase overlaps the next rather than cutting
-        // to it: the haze focuses to ~2.1s, the self-test drifts in through
-        // ~4s, the hand-off line glows up at 3.6s, and the wordmark starts
-        // surfacing at 4.6s while the self-test is still going soft. About
-        // 9.5s door to door, skippable throughout.
-        var LINE_STEP  = 250;   // gap between self-test lines
-        var LINE_START = 1000;
-        var STAMP_LAG  = 500;   // OK/SKIP settles well after the line does
-
-        at(620, function () { bootEl.classList.add('phase-post'); });
-
-        POST.forEach(function (row, i) {
-            var t = LINE_START + i * LINE_STEP;
-            at(t, function () { linesEl.children[i].classList.add('on'); });
-
-            // The memory line withholds its stamp until the count finishes.
-            if (row[1] !== null) {
-                at(t + STAMP_LAG, function () { stats[i].classList.add('on'); });
-            }
-        });
-
-        // Memory check counter — ticks up to 512K, then stamps OK. Unhurried:
-        // a number being remembered, not a benchmark running.
-        if (memLine > -1) {
-            at(LINE_START + memLine * LINE_STEP + 320, function () {
-                var value = 0;
-                every(16, function (id) {
-                    value = Math.min(MEM_TOTAL, value + 4);
-                    memEl.textContent = pad(value, 6) + 'K';
-                    if (value >= MEM_TOTAL) {
-                        clearInterval(id);
-                        stats[memLine].classList.add('on');
-                    }
-                });
-            });
-        }
-
-        // Hand-off line under the self-test. Written in one go and glowed up
-        // by CSS — the old character-by-character typing was the sharpest
-        // thing on the screen, and this sequence isn't in a hurry.
-        var LOAD_TEXT = '> LOADING sil.via ♡ v2.0';
-        at(3600, function () {
-            loadEl.textContent = LOAD_TEXT;
-            loadEl.classList.add('on');
-        });
-
-        // Wordmark starts surfacing while the self-test is still blurring
-        // away — the two overlap for well over a second. Its own animations
-        // run ~3.15s from here, the licence strip landing last.
-        at(4600, function () { bootEl.classList.add('phase-logo'); });
-
-        // Dissolve into the site, ~700ms after the last line of the wordmark
-        // settles. That pause is the console-logo moment, and it's the reason
-        // the hand-off isn't simply chained off the logo phase.
-        at(8450, function () { reveal(false); });
+        // Phase classes accumulate rather than replace each other, so the
+        // towers keep drifting under the wordmark once they're up. Roughly:
+        //   0.0s  the void comes into focus (CSS, runs on display)
+        //   1.0s  sil.via ♡ pre-title surfaces, holds
+        //   3.4s  pre-title lets go; the light towers start rising
+        //   4.8s  wordmark surfaces out of the deep, licence strip lands last
+        //   8.6s  dissolve into the page (~9.7s door to door)
+        // Skippable throughout.
+        at(1000, function () { bootEl.classList.add('phase-sce');  });
+        at(3400, function () { bootEl.classList.add('phase-rise'); });
+        at(4800, function () { bootEl.classList.add('phase-logo'); });
+        at(8600, function () { reveal(false); });
     }
 
     // ── Entry points ──
