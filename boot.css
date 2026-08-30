@@ -526,11 +526,11 @@ html.pxyz-rewind .logo-stamp {
     bottom: 26px;
     z-index: 9;
     text-align: center;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 300;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--ps2-blue-40);
+    color: var(--ps2-blue-60);
     opacity: 0;
     animation: skip-in 1.4s ease 2s both, skip-breathe 5.5s ease-in-out 3.4s infinite;
 }
@@ -542,7 +542,7 @@ html.pxyz-rewind .logo-stamp {
 
 @keyframes skip-breathe {
     0%, 100% { opacity: 0.85; }
-    50%      { opacity: 0.3;  }
+    50%      { opacity: 0.45; }
 }
 
 /* ── Hand-off ──
